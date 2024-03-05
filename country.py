@@ -1,8 +1,8 @@
 class Country:
-    def __init__(self, country_id, country_name):
-        self.__country_id = country_id
-        self.__country_name = country_name
+    def __init__(self, _id, countryName):
+        self.__id = _id
+        self.countryName = countryName
 
     @property
-    def country_id(self):
-        return self.__country_id
+    def countryId(self):
+        return self.__id

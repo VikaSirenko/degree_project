@@ -1,26 +1,26 @@
 class Booking:
-    def __init__(self, booking_id, user_id, service_id, slot_id, booking_date_date, status):
-        self.__booking_id = booking_id
-        self.__user_id = user_id
-        self.__service_id = service_id
-        self.__slot_id = slot_id
+    def __init__(self, _id, userId, serviceId, slotId, booking_date, status):
+        self.__id = _id
+        self.__userId = userId
+        self.__serviceId = serviceId
+        self.__slotId = slotId
         self.booking_date = booking_date
         self.status = status
 
     @property
-    def booking_id(self):
-        return self.__booking_id
+    def bookingId(self):
+        return self.__id
 
     @property
-    def user_id(self):
-        return self.__user_id
+    def userId(self):
+        return self.__userId
     
     @property
-    def service_id(self):
-        return self.__service_id
+    def serviceId(self):
+        return self.__serviceId
 
     @property
-    def slot_id(self):
-        return self.__slot_id
+    def slotId(self):
+        return self.__slotId
 
     

@@ -9,19 +9,19 @@ class Service:
         self.__userId= userId
 
     @property
-    def service_id(self):
+    def serviceId(self):
         return self.__id
 
     @property
-    def category_id(self):
+    def categoryId(self):
         return self.__categoryId
 
     @property
-    def country_id(self):
+    def countryId(self):
         return self.__countryId
 
     @property
-    def user_id(self):
+    def userId(self):
         return self.__userId
 
 
