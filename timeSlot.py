@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 
 class TimeSlot:
-    def __init__(self, _id, service_id, start_time, end_time, is_available=True):
+    def __init__(self, _id, serviceId, start_time, end_time, is_available=True):
         self.__id = _id
-        self.__service_id = service_id
+        self.__serviceId = serviceId
         self.start_time = start_time
         self.end_time = end_time
         self.is_available = is_available
@@ -13,7 +13,7 @@ class TimeSlot:
         return self.__id
 
     @property
-    def service_id(self):
-        return self.__service_id
+    def serviceId(self):
+        return self.__serviceId
 
     

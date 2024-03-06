@@ -1,4 +1,4 @@
-from user import User
+from user import *
 from bdConnection import db
 from bson.objectid import ObjectId
 import hashlib

@@ -1,11 +1,11 @@
 class Booking:
-    def __init__(self, _id, userId, serviceId, slotId, booking_date, status):
+    def __init__(self, _id, userId, serviceId, slotId, booking_date):
         self.__id = _id
         self.__userId = userId
         self.__serviceId = serviceId
         self.__slotId = slotId
         self.booking_date = booking_date
-        self.status = status
+
 
     @property
     def bookingId(self):
