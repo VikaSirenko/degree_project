@@ -39,13 +39,7 @@ class UsersRepository:
     def getUserByEmail(self, email):        
         query = {"email": email}
         user = self.coll.find_one(query)
-        _id = user["_id"]
-        firstName = user["firstName"]
-        lastName = user["lastName"]
-        email = user["email"]
-        password = user["password"]
-        web_user = User(_id, firstName, lastName, email, password)  
-        return web_user
+        return user
         
 
     # check whether the user with the ID exists
@@ -62,13 +56,7 @@ class UsersRepository:
     def getUserById(self, user_id):              
         query = {'_id': ObjectId(user_id)}
         user = self.coll.find_one(query)
-        _id = user["_id"]
-        firstName = user["firstName"]
-        lastName = user["lastName"]
-        email = user["email"]
-        password = user["password"]
-        web_user = User(_id, firstName, lastName, email, password)  
-        return web_user
+        return user
 
 
     # check whether the user has entered the correct e-mail and password and can be admitted to the system

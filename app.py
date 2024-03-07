@@ -126,13 +126,32 @@ def updateUser():
         old_user=usersConnection.getUserByEmail(data['email'])
         content = request.form  
         new_user= User(0, content['firstName'], content['lastName'], content['email'], content['password'])
-        result= usersConnection.updateUser(new_user, old_user.id)
+        result= usersConnection.updateUser(new_user, old_user['_id'])
         if(result=='updated'):
             return  "User data has been updated", 200
         else:
             return "User data has not been updated", 404
     except:
         return "Unable to update user data", 404
+
+
+# server function for service creation 
+@app.route('/createService', methods=['POST'])
+@token_required
+def createService():
+    try:
+        user_data=request.headers.get('authorization')
+        data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user=usersConnection.getUserByEmail(data['email'])
+        content = request.form
+        service = Service(0, content['title'], content['description'], content['location'],ObjectId(content['categoryId']), ObjectId(content['countryId']), user['_id'])
+        newId = servicesConnection.createService(service, categoriesConnection, countriesConnection, usersConnection)
+        if(newId==None):
+            return  "Service already exists ", 404
+        else:
+            return "Service created", 200
+    except:
+        return "It is not possible to create a new service", 404
 
 
 if __name__ == '__main__':

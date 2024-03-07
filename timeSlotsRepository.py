@@ -73,14 +73,7 @@ class TimeSlotsRepository:
     def getTimeSlotById(self, timeSlotId):              
         query = {'_id': timeSlotId}
         timeSlot = self.coll.find_one(query)
-        _id=timeSlot["_id"]
-        serviceId= timeSlot["serviceId"]
-        start_time=timeSlot["start_time"]
-        end_time = timeSlot["end_time"]
-        is_available= timeSlot["is_available"]
-            
-        get_TimeSlot= TimeSlot(_id,serviceId, start_time, end_time, is_available)
-        return get_TimeSlot
+        return timeSlot
     
     # check whether the time slot with the ID exists
     def timeSlotExistsById(self, timeSlotId):          

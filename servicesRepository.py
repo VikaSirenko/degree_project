@@ -63,15 +63,7 @@ class ServicesRepository:
     def getServiceById(self, serviceId):              
         query = {'_id': ObjectId(serviceId)}
         service = self.coll.find_one(query)
-        _id=service["_id"]
-        title =service["title"]
-        description= service["description"]
-        location=service["location"]
-        categoryId = service["categoryId"]
-        countryId = service["countryId"]
-        userId = service["userId"]
-        get_service= Service(_id,title, description, location, categoryId, countryId, userId)
-        return get_service
+        return service
 
     # delete service by ID
     def deleteServiceByID(self, serviceId):                       
