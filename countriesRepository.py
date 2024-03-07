@@ -19,3 +19,13 @@ class CountriesRepository:
         query = {'_id': countryId}
         country = self.coll.find_one(query)
         return country
+    
+
+    # check whether the country with the ID exists
+    def countryExistsById(self, countryId):          
+        query = {'_id': ObjectId(countryId)}
+        country=self.coll.find_one(query)
+        if(country!=None):
+            return True
+        else:
+            return False

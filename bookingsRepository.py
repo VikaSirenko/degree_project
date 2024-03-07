@@ -43,10 +43,13 @@ class BookingsRepository:
         return list_bookings
 
     #create new booking 
-    def createBooking(self, booking):                             
-        new_booking={ "userId": booking.userId, "serviceId": booking.serviceId, "slotId": booking.slotId , "booking_date": booking.booking_date}
-        result=self.coll.insert_one(new_booking)
-        return result.inserted_id
+    def createBooking(self, booking, userConnection, serviceConnection, timeSlotConnection):   
+        if(userConnection.userExistsById(booking.userId)==True and  serviceConnection.serviceExistsById(booking.serviceId)==True and  timeSlotConnection.timeSlotExistsById(booking.timeSlotId)==True):                          
+            new_booking={ "userId": booking.userId, "serviceId": booking.serviceId, "slotId": booking.slotId , "booking_date": booking.booking_date}
+            result=self.coll.insert_one(new_booking)
+            return result.inserted_id
+        else:
+            return None
     
     
     # delete booking by ID

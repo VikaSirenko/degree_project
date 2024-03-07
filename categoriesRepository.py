@@ -18,3 +18,12 @@ class CategoriesRepository:
         query = {'_id': categoryId}
         category = self.coll.find_one(query)
         return category
+    
+     # check whether the category with the ID exists
+    def categoryExistsById(self, categoryId):          
+        query = {'_id': ObjectId(categoryId)}
+        category=self.coll.find_one(query)
+        if(category!=None):
+            return True
+        else:
+            return False

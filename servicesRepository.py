@@ -50,10 +50,13 @@ class UsersRepository:
 
 
     # create service  and add to database 
-    def createService(self, service):                             
-        new_service={ "title": service.title, "description": service.description, "location": service.location , "categoryId": service.categoryId, "countryId": service.countryId, "userId": service.userId}
-        result=self.coll.insert_one(new_service)
-        return result.inserted_id
+    def createService(self, service, categoryConnection, countryConnection, userConnection):    
+        if(userConnection.userExistsById(service.userId)==True and  categoryConnection.categoryExistsById(service.categoryId)==True and  countryConnection.countryExistsById(service.countryId)==True):                         
+            new_service={ "title": service.title, "description": service.description, "location": service.location , "categoryId": service.categoryId, "countryId": service.countryId, "userId": service.userId}
+            result=self.coll.insert_one(new_service)
+            return result.inserted_id
+        else: 
+            return None
     
     
     # find service data by ID

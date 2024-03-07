@@ -10,10 +10,13 @@ class TimeSlotsRepository:
         self.coll = db.timeSlots
 
     # create time slot and add to database 
-    def createTimeSlot(self, timeSlot):                             
-        new_timeSlot={ "serviceId": timeSlot.serviceId, "start_time": timeSlot.start_time, "end_time": timeSlot.end_time, "is_available": timeSlot.is_available}
-        result=self.coll.insert_one(new_timeSlot)
-        return result.inserted_id
+    def createTimeSlot(self, timeSlot, serviceConnection):  
+        if(serviceConnection.serviceExistsById(timeSlot.serviceId)==True):                                                    
+            new_timeSlot={ "serviceId": timeSlot.serviceId, "start_time": timeSlot.start_time, "end_time": timeSlot.end_time, "is_available": timeSlot.is_available}
+            result=self.coll.insert_one(new_timeSlot)
+            return result.inserted_id
+        else:
+            return None
     
     #get list of all time slots that service has
     def getListOfServicesTimeslots(self, serviceId):
@@ -72,6 +75,14 @@ class TimeSlotsRepository:
         timeSlot = self.coll.find_one(query)
         return timeSlot
     
+    # check whether the time slot with the ID exists
+    def timeSlotExistsById(self, timeSlotId):          
+        query = {'_id': ObjectId(timeSlotId)}
+        timeSlot=self.coll.find_one(query)
+        if(timeSlot!=None):
+            return True
+        else:
+            return False
 
 
     
