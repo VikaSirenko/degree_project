@@ -12,13 +12,19 @@ class CountriesRepository:
     def getCountryByName(self, countryName):              
         query = {'countryName': countryName}
         country = self.coll.find_one(query)
-        return country
+        _id = country["id"]
+        countryName= country["countryName"]
+        get_country=Country(_id, countryName)
+        return get_country
     
     # find country data by ID
     def getCountryById(self, countryId):              
         query = {'_id': countryId}
         country = self.coll.find_one(query)
-        return country
+        _id = country["id"]
+        countryName= country["countryName"]
+        get_country=Country(_id, countryName)
+        return get_country
     
 
     # check whether the country with the ID exists

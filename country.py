@@ -4,5 +4,5 @@ class Country:
         self.countryName = countryName
 
     @property
-    def countryId(self):
+    def id(self):
         return self.__id

@@ -4,7 +4,7 @@ class Category:
         self.categoryName = categoryName
 
     @property
-    def category_id(self):
+    def id(self):
         return self.__categoryId
 
     

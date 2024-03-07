@@ -126,7 +126,6 @@ def updateUser():
         old_user=usersConnection.getUserByEmail(data['email'])
         content = request.form  
         new_user= User(0, content['firstName'], content['lastName'], content['email'], content['password'])
-        userId= old_user._id
         result= usersConnection.updateUser(new_user, old_user.id)
         if(result=='updated'):
             return  "User data has been updated", 200

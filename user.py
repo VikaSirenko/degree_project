@@ -13,7 +13,7 @@ class User(object):
         return hashed_password
 
     @property
-    def _id(self):
+    def id(self):
         return self.__id
 
     @property

@@ -63,7 +63,15 @@ class ServicesRepository:
     def getServiceById(self, serviceId):              
         query = {'_id': ObjectId(serviceId)}
         service = self.coll.find_one(query)
-        return service
+        _id=service["_id"]
+        title =service["title"]
+        description= service["description"]
+        location=service["location"]
+        categoryId = service["categoryId"]
+        countryId = service["countryId"]
+        userId = service["userId"]
+        get_service= Service(_id,title, description, location, categoryId, countryId, userId)
+        return get_service
 
     # delete service by ID
     def deleteServiceByID(self, serviceId):                       
@@ -99,7 +107,7 @@ class ServicesRepository:
         return result.deleted_count
     
 
-    #filtering services by country 
+    #filtering services by country   #change , make a list
     def getServicesByCountryName(self, countryName):
         country = self.countriesRepo.getCountryByName(countryName)
        
@@ -111,7 +119,7 @@ class ServicesRepository:
         return list(services)
     
     
-    #filtering services by category
+    #filtering services by category              #change , make a list
     def getServicesByCategory(self, categoryName):
         category = self.categoryRepo.getCategoryByName(categoryName)
        

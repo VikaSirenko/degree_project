@@ -8,7 +8,7 @@ class Booking:
 
 
     @property
-    def bookingId(self):
+    def id(self):
         return self.__id
 
     @property
