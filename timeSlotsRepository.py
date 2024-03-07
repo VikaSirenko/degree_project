@@ -1,5 +1,5 @@
 from timeSlot import *
-from bdConnection import *
+#from bdConnection import *
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
 

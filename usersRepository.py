@@ -1,5 +1,5 @@
 from user import *
-from bdConnection import db
+#from bdConnection import db
 from bson.objectid import ObjectId
 import hashlib
 
@@ -82,7 +82,7 @@ class UsersRepository:
 
     # delete user by ID
     def deleteUserByID(self, user_id):                       
-        result = self.coll.delete_one({'_id': user_id})
+        result = self.coll.delete_one({'_id': ObjectId(user_id)})
         if result.deleted_count > 0:
             return True
         else:

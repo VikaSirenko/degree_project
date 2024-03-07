@@ -21,9 +21,4 @@ class Review:
     def serviceId(self):
         return self.__serviceId
 
-    @rating.setter
-    def rating(self, value):
-        if 1 <= value <= 5:
-            self.rating = value
-        else:
-            raise ValueError("Rating must be between 1 and 5")
+

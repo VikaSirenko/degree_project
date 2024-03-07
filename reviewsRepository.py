@@ -1,5 +1,5 @@
 from review import *
-from bdConnection import db
+#from bdConnection import db
 from bson.objectid import ObjectId
 
 
@@ -45,7 +45,7 @@ class ReviewsRepository:
     
 
     #delete all service's reviews 
-    def deleteAllServicereviews(self, serviceId):
+    def deleteAllServiceReviews(self, serviceId):
         result = self.coll.delete_many({'serviceId': serviceId})
         return result.deleted_count
     

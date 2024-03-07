@@ -1,9 +1,9 @@
 from service import *
-from bdConnection import *
+#from bdConnection import *
 from bson.objectid import ObjectId
 
 
-class UsersRepository:
+class ServicesRepository:
 
     def __init__(self, db):
         self.coll = db.services 
@@ -94,7 +94,7 @@ class UsersRepository:
     
 
     # delete all services that user created by user's ID
-    def deleteAllservicesByUserId(self, userId):
+    def deleteAllServicesByUserId(self, userId):
         result = self.coll.delete_many({"userId": userId})
         return result.deleted_count
     
