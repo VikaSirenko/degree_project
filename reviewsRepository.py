@@ -46,13 +46,13 @@ class ReviewsRepository:
 
     #delete all service's reviews 
     def deleteAllServiceReviews(self, serviceId):
-        result = self.coll.delete_many({'serviceId': serviceId})
+        result = self.coll.delete_many({'serviceId': ObjectId(serviceId)})
         return result.deleted_count
     
 
     #delete all user's reviews 
     def deleteAllUserReviews(self, userId):
-        result = self.coll.delete_many({'userId': userId})
+        result = self.coll.delete_many({'userId': ObjectId(userId)})
         return result.deleted_count
 
 

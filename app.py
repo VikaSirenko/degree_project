@@ -15,7 +15,7 @@ from timeSlot import *
 from user import *
 from flask import copy_current_request_context
 import jwt
-import datetime
+from datetime import datetime
 from functools import wraps
 from bdConnection import *
 
@@ -127,7 +127,7 @@ def updateUser():
         content = request.form  
         new_user= User(0, content['firstName'], content['lastName'], content['email'], content['password'])
         result= usersConnection.updateUser(new_user, old_user['_id'])
-        if(result=='updated'):
+        if(result== True):
             return  "User data has been updated", 200
         else:
             return "User data has not been updated", 404
@@ -152,6 +152,124 @@ def createService():
             return "Service created", 200
     except:
         return "It is not possible to create a new service", 404
+
+
+# server function for deleting service  
+@app.route('/deleteService', methods=['DELETE'])
+@token_required
+def deleteService():
+    try:
+        user_data=request.headers.get('authorization')
+        data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user=usersConnection.getUserByEmail(data['email'])
+        content = request.form
+        service= servicesConnection.getServiceById(content['_id'])
+        if(user["_id"]==service["userId"]):
+            result=servicesConnection.deleteServiceByID(content['_id'])
+            if (result==True):
+                reviewsConnection.deleteAllServiceReviews(content['_id'])
+                bookingsConnection.deleteAllBookingsByServiceId(content['_id'])
+                timeSlotsConnection.deleteAllTimeSlotsByServiceId(content['_id'])
+                return "Deleted", 200
+            else:
+                return ("Cannot find service to delete"), 404
+        else:
+            return("You do not have rights to perform this action"), 403
+
+    except:
+        return "Can not delete", 400
+    
+
+# server function for updating service data
+@app.route('/updateService', methods=['PUT'])
+@token_required
+def updateService():
+    try:
+        user_data=request.headers.get('authorization')
+        data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user=usersConnection.getUserByEmail(data['email'])
+        content = request.form
+        service= servicesConnection.getServiceById(content['_id'])
+        if(user["_id"]==service["userId"]):
+            new_service= Service(0, content['title'], content['description'], content['location'],ObjectId(content['categoryId']), ObjectId(content['countryId']), service["userId"])
+            result= servicesConnection.updateService(new_service, service['_id'])
+            if(result== True):
+                return  "Service data has been updated", 200
+            else:
+                return "Service data has not been updated", 404
+        else:
+            return("You do not have rights to perform this action"), 403
+    except:
+        return "Unable to update service data", 404
+    
+
+# server function for time slot creation 
+@app.route('/createTimeSlot', methods=['POST'])
+@token_required
+def createTimeSlot():
+    try:
+        user_data=request.headers.get('authorization')
+        data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user=usersConnection.getUserByEmail(data['email'])
+        content = request.form
+        service= servicesConnection.getServiceById(content['serviceId'])
+        if(user["_id"]==service["userId"]):
+            timeSlot = TimeSlot(0, ObjectId(content['serviceId']), content['start_time'], content['end_time'], True)
+            newId = timeSlotsConnection.createTimeSlot(timeSlot, servicesConnection)
+            if(newId==None):
+                return  "Time slot already exists ", 404
+            else:
+                return "Time slot created", 200
+        else:
+            return("You do not have rights to perform this action"), 403
+    except:
+        return "It is not possible to create a new time slot", 404
+
+
+# server function for deleting time slot 
+@app.route('/deleteTimeSlot', methods=['DELETE'])
+@token_required
+def deleteTimeSlot():
+    try:
+        user_data=request.headers.get('authorization')
+        data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user=usersConnection.getUserByEmail(data['email'])
+        content = request.form
+        service= servicesConnection.getServiceById(content['serviceId'])
+        if(user["_id"]==service["userId"]):
+            result=timeSlotsConnection.deleteTimeSlotByID(content['_id'])
+            if (result==True):
+                return "Deleted", 200
+            else:
+                return ("Cannot find time slot to delete"), 404
+        else:
+            return("You do not have rights to perform this action"), 403
+
+    except:
+        return "Can not delete", 400
+    
+
+# server function for updating time slot a data
+@app.route('/updateTimeSlotAvailability', methods=['PUT'])
+@token_required
+def updateTimeSlotAvailability():
+    try:
+        user_data=request.headers.get('authorization')
+        data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user=usersConnection.getUserByEmail(data['email'])
+        content = request.form
+        service= servicesConnection.getServiceById(content['serviceId'])
+        if(user["_id"]==service["userId"]):
+            result= timeSlotsConnection.updateTimeSlotAvailability(content['is_available'], content['_id'])
+            if(result==True):
+                return  "Time slot availability data has been updated", 200
+            else:
+                return "Time slot availability data has not been updated", 404
+        else:
+            return("You do not have rights to perform this action"), 403
+    except:
+        return "Unable to update time slot availability data", 404
+    
 
 
 if __name__ == '__main__':

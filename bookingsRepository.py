@@ -54,7 +54,7 @@ class BookingsRepository:
     
     # delete booking by ID
     def deleteBookingByID(self, bookingId):                       
-        result = self.coll.delete_one({'_id': bookingId})
+        result = self.coll.delete_one({'_id': ObjectId(bookingId)})
         if result.deleted_count > 0:
             return True
         else:
@@ -62,11 +62,11 @@ class BookingsRepository:
         
     # delete all bookings that user created by user's ID
     def deleteAllBookingsByUserId(self, userId):
-        result = self.coll.delete_many({"userId": userId})
+        result = self.coll.delete_many({"userId": ObjectId(userId)})
         return result.deleted_count
     
 
     # delete all bookings that service has using serviceId
     def deleteAllBookingsByServiceId(self, serviceId):
-        result = self.coll.delete_many({"serviceId": serviceId})
+        result = self.coll.delete_many({"serviceId": ObjectId(serviceId)})
         return result.deleted_count

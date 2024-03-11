@@ -67,7 +67,7 @@ class ServicesRepository:
 
     # delete service by ID
     def deleteServiceByID(self, serviceId):                       
-        result = self.coll.delete_one({'_id': serviceId})
+        result = self.coll.delete_one({'_id': ObjectId(serviceId)})
         if result.deleted_count > 0:
             return True
         else:

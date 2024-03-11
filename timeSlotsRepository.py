@@ -52,11 +52,25 @@ class TimeSlotsRepository:
             return True
         else:
             return False
+        
+        
+    # update time slot's  availability data using ID
+    def updateTimeSlotAvailability(self , is_available , timeSlotId):          
+        result = self.coll.update_one(
+        {'_id': ObjectId(timeSlotId)},
+        {'$set': {
+            'is_available': is_available
+        }}
+        )
+        if result.modified_count > 0:
+            return True
+        else:
+            return False
 
 
     # delete time slot by ID
     def deleteTimeSlotByID(self, timeSlotId):                       
-        result = self.coll.delete_one({'_id': timeSlotId})
+        result = self.coll.delete_one({'_id':ObjectId(timeSlotId)})
         if result.deleted_count > 0:
             return True
         else:
@@ -65,7 +79,7 @@ class TimeSlotsRepository:
 
     # delete all time slots that connect to service using serviceId
     def deleteAllTimeSlotsByServiceId(self, serviceId):
-        result = self.coll.delete_many({"serviceId": serviceId})
+        result = self.coll.delete_many({"serviceId": ObjectId(serviceId)})
         return result.deleted_count
     
 
