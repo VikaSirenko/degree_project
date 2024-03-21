@@ -54,7 +54,7 @@ def signIn():
         password=content['password']
         exist=usersConnection.userExistForSignIn(email, password)
         if(exist):
-            token=jwt.encode({'email':email, 'password':password, 'exp': datetime.datetime.utcnow()+ datetime.timedelta(hours=24)}, app.config["SECRET_KEY"])
+            token=jwt.encode({'email':email, 'password':password, 'exp': datetime.utcnow()+ timedelta(hours=24)}, app.config["SECRET_KEY"])
             return token, 200
         else:
             return ("No such user exists"), 404
@@ -271,6 +271,56 @@ def updateTimeSlotAvailability():
         return "Unable to update time slot availability data", 404
     
 
+# server function for booking creation 
+@app.route('/createBooking', methods=['POST'])
+@token_required
+def createBooking():
+    try:
+        user_data=request.headers.get('authorization')
+        data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user=usersConnection.getUserByEmail(data['email'])
+        content = request.form
+        service= servicesConnection.getServiceById(content['serviceId'])
+        timeSlot = timeSlotsConnection.getTimeSlotById(content['slotId'])
+        if(user["_id"]==service["userId"] and service["_id"]==timeSlot["serviceId"] ):
+            if(bool(timeSlot['is_available'])==True):
+                booking = Booking(0, user["_id"], ObjectId(content["serviceId"]), ObjectId(content['slotId']), content['booking_date'])
+                newId = bookingsConnection.createBooking(booking, usersConnection, servicesConnection, timeSlotsConnection)
+                if(newId==None):
+                    return  "Booking already exists ", 404
+                else:
+                    timeSlotsConnection.updateTimeSlotAvailability(False, content['slotId'])
+                    return "Booking created", 200
+            else:
+                return "This service is already booked for this date and time", 404
+        else:
+            return("You do not have rights to perform this action"), 403
+    except:
+        return "It is not possible to create a new booking", 404
+    
+
+# server function for deleting booking 
+@app.route('/deleteBooking', methods=['DELETE'])
+@token_required
+def deleteBooking():
+    try:
+        user_data=request.headers.get('authorization')
+        data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user=usersConnection.getUserByEmail(data['email'])
+        content = request.form
+        booking= bookingsConnection.getBookingById(content['_id'])
+        if(user["_id"]==booking["userId"]):
+            result=bookingsConnection.deleteBookingByID(content['_id'])
+            if (result==True):
+                timeSlotsConnection.updateTimeSlotAvailability(True, booking['slotId'])
+                return "Deleted", 200
+            else:
+                return ("Cannot find time slot to delete"), 404
+        else:
+            return("You do not have rights to perform this action"), 403
+
+    except:
+        return "Can not delete", 400
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=8080)

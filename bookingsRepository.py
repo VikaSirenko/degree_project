@@ -41,10 +41,16 @@ class BookingsRepository:
             list_bookings.append(serviceBooking)
         
         return list_bookings
+    
+     # find booking data by ID
+    def getBookingById(self, bookingId):              
+        query = {'_id': ObjectId(bookingId)}
+        booking = self.coll.find_one(query)
+        return booking
 
     #create new booking 
     def createBooking(self, booking, userConnection, serviceConnection, timeSlotConnection):   
-        if(userConnection.userExistsById(booking.userId)==True and  serviceConnection.serviceExistsById(booking.serviceId)==True and  timeSlotConnection.timeSlotExistsById(booking.timeSlotId)==True):                          
+        if(userConnection.userExistsById(booking.userId)==True and  serviceConnection.serviceExistsById(booking.serviceId)==True and  timeSlotConnection.timeSlotExistsById(booking.slotId)==True):                          
             new_booking={ "userId": booking.userId, "serviceId": booking.serviceId, "slotId": booking.slotId , "booking_date": booking.booking_date}
             result=self.coll.insert_one(new_booking)
             return result.inserted_id

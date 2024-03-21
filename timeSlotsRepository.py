@@ -85,7 +85,7 @@ class TimeSlotsRepository:
 
     # find time slot data by ID
     def getTimeSlotById(self, timeSlotId):              
-        query = {'_id': timeSlotId}
+        query = {'_id': ObjectId(timeSlotId)}
         timeSlot = self.coll.find_one(query)
         return timeSlot
     
