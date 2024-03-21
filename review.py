@@ -1,7 +1,7 @@
 from datetime import datetime
 
 class Review:
-    def __init__(self, _id, userId, serviceId, rating, comment, review_date=None):
+    def __init__(self, _id, userId, serviceId, rating, comment, review_date):
         self.__id = _id
         self.__userId = userId
         self.__serviceId = serviceId

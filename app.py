@@ -322,5 +322,71 @@ def deleteBooking():
     except:
         return "Can not delete", 400
 
+
+# server function for review creation 
+@app.route('/createReview', methods=['POST'])
+@token_required
+def createReview():
+    try:
+        user_data=request.headers.get('authorization')
+        data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user=usersConnection.getUserByEmail(data['email'])
+        content = request.form
+        review= Review(0, ObjectId(user['_id']), ObjectId(content['serviceId']), content["rating"], content['comment'], None)
+        newId = reviewsConnection.createReview(review, usersConnection, servicesConnection)
+        if(newId==None):
+            return  "Review already exists ", 404
+        else:
+            return "Review created", 200
+    except:
+        return "It is not possible to create a new review", 404
+    
+
+# server function for updating review data
+@app.route('/updateReview', methods=['PUT'])
+@token_required
+def updateReview():
+    try:
+        user_data=request.headers.get('authorization')
+        data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user=usersConnection.getUserByEmail(data['email'])
+        content = request.form
+        review = reviewsConnection.getReviewById(content['_id'])
+        if(user["_id"]==review["userId"]):
+            new_review= Review(0, ObjectId(user['_id']), review['serviceId'], content['rating'], content['comment'], review['review_date'])
+            result= reviewsConnection.updateReview(new_review, review['_id'])
+            if(result== True):
+                return  "Review data has been updated", 200
+            else:
+                return "Review data has not been updated", 404
+        else:
+            return("You do not have rights to perform this action"), 403
+    except:
+        return "Unable to update review data", 404
+
+
+# server function for deleting review 
+@app.route('/deleteReview', methods=['DELETE'])
+@token_required
+def deleteReview():
+    try:
+        user_data=request.headers.get('authorization')
+        data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user=usersConnection.getUserByEmail(data['email'])
+        content = request.form
+        review= reviewsConnection.getReviewById(content['_id'])
+        if(user["_id"]==review["userId"] or user["_id"]== servicesConnection.getServiceById(review['serviceId'])['userId'] ):
+            result=reviewsConnection.deleteReviewById(content['_id'])
+            if (result==True):
+                return "Deleted", 200
+            else:
+                return ("Cannot find review to delete"), 404
+        else:
+            return("You do not have rights to perform this action"), 403
+
+    except:
+        return "Can not delete", 400
+
+
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=8080)

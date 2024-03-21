@@ -36,7 +36,7 @@ class ReviewsRepository:
             return None 
 
     # delete review by ID
-    def deleteReview(self, reviewId):
+    def deleteReviewById(self, reviewId):
         result = self.coll.delete_one({'_id': ObjectId(reviewId)})
         if(result.deleted_count==1):
             return True
@@ -73,3 +73,9 @@ class ReviewsRepository:
             return True
         else:
             return False
+        
+   # find review data by ID
+    def getReviewById(self, reviewId):              
+        query = {'_id': ObjectId(reviewId)}
+        review = self.coll.find_one(query)
+        return review
