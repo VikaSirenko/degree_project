@@ -18,10 +18,12 @@ import jwt
 from datetime import datetime
 from functools import wraps
 from bdConnection import *
+from flask_cors import CORS
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY']="thisisthesecretkey"
+CORS(app)
 
 bookingsConnection= BookingsRepository(db)
 categoriesConnection = CategoriesRepository (db)
@@ -46,20 +48,20 @@ def userRegistration():
         return "It is not possible to create a new user", 404
 
 # server function for user sign in
-@app.route('/signIn', methods=['GET'])
+@app.route('/signIn', methods=['POST'])
 def signIn():
     try:
-        content = request.form
+        content = request.json
         email = content['email']
         password=content['password']
         exist=usersConnection.userExistForSignIn(email, password)
         if(exist):
             token=jwt.encode({'email':email, 'password':password, 'exp': datetime.utcnow()+ timedelta(hours=24)}, app.config["SECRET_KEY"])
-            return token, 200
+            return jsonify({'token': token}), 200
         else:
-            return ("No such user exists"), 404
+            return jsonify({'message': "No such user exists"}), 404
     except: 
-        return "Unable to get token", 400
+        return jsonify({'message': "Unable to get token"}), 400
 
 
 def token_required(f):
