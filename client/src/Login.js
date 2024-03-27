@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; 
-import './Login.css';
+import './css/Login.css';
 import logo from './images/logo.webp';
 
 
@@ -23,7 +23,7 @@ function Login() {
             navigate('/dashboard'); 
         } catch (error) {
             console.error('An error occurred!', error);
-            alert(error);
+            alert("Something went wrong");
         }
     };
 

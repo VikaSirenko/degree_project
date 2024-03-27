@@ -37,15 +37,15 @@ usersConnection = UsersRepository (db)
 @app.route('/userRegistration', methods=['POST'])
 def userRegistration():
     try:
-        content = request.form
+        content = request.json
         user = User(0, content['firstName'], content['lastName'], content['email'], content['password'])
         newId = usersConnection.createUser(user)
         if(newId==None):
-            return  "User with that email exists ", 404
+            return  jsonify({'message':"User with that email exists"}), 404
         else:
-            return "User created", 200
+            return jsonify({'message':"User created"}), 200
     except:
-        return "It is not possible to create a new user", 404
+        return jsonify({'message':"It is not possible to create a new user"}), 404
 
 # server function for user sign in
 @app.route('/signIn', methods=['POST'])
