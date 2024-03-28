@@ -20,7 +20,7 @@ function Login() {
             console.log(response.data); 
             localStorage.setItem('token', response.data.token); 
             alert('Successful login!');
-            navigate('/dashboard'); 
+            navigate('/main'); 
         } catch (error) {
             console.error('An error occurred!', error);
             alert("Something went wrong");
