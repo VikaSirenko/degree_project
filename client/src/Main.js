@@ -1,25 +1,30 @@
 import React from 'react';
 import './css/Main.css';
 import logo from './images/logo.webp';
+import { useNavigate } from 'react-router-dom';
+
 
 const Main = () => {
-  // Event handlers (You'll need to implement the actual navigation logic)
-  const handleCreateService = () => {/* Navigate to create service page */};
+  const navigate = useNavigate();
+  const handleCreateService = () => {navigate('/create-service')};
+  const handleShowAllServices = () => {/* Display all services */};
   const handleChangeLanguage = () => {/* Show language options */};
+  const handleMyAccount = () => {/* Navigate to my account page */};
   const handleSignOut = () => {/* Navigate to sign-in page */};
   const handleSearch = (event) => {
     event.preventDefault();
     // Execute search query
   };
-  const handleShowAllServices = () => {/* Display all services */};
 
   return (
     <>
       <header className="header">
         <img src={logo} alt="Logo" className="site-logo" />
-        <button onClick={handleCreateService} className="header-button">Create service</button>
+        <button onClick={handleCreateService} className="header-button">Create Service</button>
+        <button onClick={handleShowAllServices} className="header-button">All Services</button> {/* Added "All Services" button */}
         <button onClick={handleChangeLanguage} className="header-button">Change Language</button>
-        <button onClick={handleSignOut} className="header-button">Sign out</button>
+        <button onClick={handleMyAccount} className="header-button">My Account</button>
+        <button onClick={handleSignOut} className="header-button">Sign Out</button>
       </header>
       <div className="search-container">
         <form onSubmit={handleSearch} className="search-form">
@@ -27,10 +32,9 @@ const Main = () => {
           <button type="submit" className="search-button">Search</button>
         </form>
       </div>
-      <button onClick={handleShowAllServices} className="all-services-button">All Services</button>
+      {/* Removed the "All Services" button from the bottom of the page */}
     </>
   );
 };
 
 export default Main;
-

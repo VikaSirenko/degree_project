@@ -29,3 +29,10 @@ class CountriesRepository:
             return True
         else:
             return False
+        
+    def getListOfCountries(self):
+        all_countries = self.coll.find()
+        list_countries = [country["countryName"] for country in all_countries]
+        return list_countries
+
+    

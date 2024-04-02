@@ -145,8 +145,10 @@ def createService():
         user_data=request.headers.get('authorization')
         data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
         user=usersConnection.getUserByEmail(data['email'])
-        content = request.form
-        service = Service(0, content['title'], content['description'], content['location'],ObjectId(content['categoryId']), ObjectId(content['countryId']), user['_id'])
+        content = request.json
+        country=countriesConnection.getCountryByName(content['countryName'])
+        category=categoriesConnection.getCategoryByName(content['categoryName'])
+        service = Service(0, content['title'], content['description'], content['location'],category['_id'], country['_id'], user['_id'])
         newId = servicesConnection.createService(service, categoriesConnection, countriesConnection, usersConnection)
         if(newId==None):
             return  "Service already exists ", 404
@@ -154,7 +156,6 @@ def createService():
             return "Service created", 200
     except:
         return "It is not possible to create a new service", 404
-
 
 # server function for deleting service  
 @app.route('/deleteService', methods=['DELETE'])
@@ -388,6 +389,24 @@ def deleteReview():
 
     except:
         return "Can not delete", 400
+    
+@app.route('/getCountries', methods=['GET'])
+def getCountries():
+    try:
+        countryNames = countriesConnection.getListOfCountries()
+        return jsonify({'countries': countryNames}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'message': 'Error fetching countries'}), 500
+
+@app.route('/getCategories', methods=['GET'])
+def getCategories():
+    try:
+        categoriesNames = categoriesConnection.getListOfCategories()
+        return jsonify({'categories': categoriesNames}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'message': 'Error fetching categories'}), 500
 
 
 if __name__ == '__main__':

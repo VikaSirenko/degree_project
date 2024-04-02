@@ -27,3 +27,8 @@ class CategoriesRepository:
             return True
         else:
             return False
+        
+    def getListOfCategories(self):
+        all_categories = self.coll.find()
+        list_categories = [category["categoryName"] for category in all_categories]
+        return list_categories

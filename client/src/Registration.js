@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import './css/Registration.css'; 
+import { useNavigate } from 'react-router-dom'; 
 
 const Registration = () => {
+  const navigate = useNavigate(); 
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -34,7 +36,7 @@ const Registration = () => {
     }
 
     try {
-        const response = await fetch('/userRegistration', {
+        const response = await fetch('http://localhost:8080/userRegistration', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -46,6 +48,7 @@ const Registration = () => {
       if (response.ok) {
         const result = await response.json();
         alert(result.message); 
+        navigate('/main'); 
       } else {
         const error = await response.json();
         alert(error.message);
@@ -65,7 +68,7 @@ const Registration = () => {
         <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" />
         <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Password" />
         <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} placeholder="Confirm password" />
-         <button type="submit">Register</button>
+        <button type="submit">Register</button>
       </form>
     </div>
   );
