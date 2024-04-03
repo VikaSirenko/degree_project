@@ -18,12 +18,12 @@ const CreateService = () => {
     setServiceData({ ...serviceData, [e.target.name]: e.target.value });
   };
 
-  const handleCountrySelect = (countryName) => {
-    setServiceData({ ...serviceData, countryName });
-  };
-
   const handleCategorySelect = (categoryName) => {
     setServiceData({ ...serviceData, categoryName });
+  };
+
+  const handleCountrySelect = (countryName) => {
+    setServiceData({ ...serviceData, countryName });
   };
 
   const handleSubmit = async (e) => {

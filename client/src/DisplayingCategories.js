@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-const CategoriesForm = () => {
+// Додано пропс onSelect для передачі вибраної категорії назад до батьківського компонента
+const CategoriesForm = ({ onSelect }) => {
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('Choose Category');
-  const [isListOpen, setIsListOpen] = useState(false);
 
   useEffect(() => {
     fetchCategories();
@@ -24,26 +23,20 @@ const CategoriesForm = () => {
   };
 
   const handleSelectCategory = (e) => {
-    setSelectedCategory(e.target.value);
-    setIsListOpen(false); 
+    // Використання пропса onSelect для відправлення вибраної категорії
+    onSelect(e.target.value);
   };
 
   return (
     <div>
-      {isListOpen ? (
-        <select onChange={handleSelectCategory} onBlur={() => setIsListOpen(false)} autoFocus>
-          <option disabled selected value> -- select an option -- </option>
-          {categories.map((categoryName, index) => (
-            <option key={index} value={categoryName}>
-              {categoryName}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <button onClick={() => setIsListOpen(!isListOpen)}>
-          {selectedCategory}
-        </button>
-      )}
+      <select onChange={handleSelectCategory} defaultValue="">
+        <option disabled value=""> -- select a category -- </option>
+        {categories.map((category, index) => (
+          <option key={index} value={category}>
+            {category}
+          </option>
+        ))}
+      </select>
     </div>
   );
 };

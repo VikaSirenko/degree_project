@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-const CountriesForm = () => {
+const CountriesForm = ({ onSelect }) => {
   const [countries, setCountries] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState('Choose Country');
-  const [isListOpen, setIsListOpen] = useState(false);
 
   useEffect(() => {
     fetchCountries();
@@ -24,26 +22,19 @@ const CountriesForm = () => {
   };
 
   const handleSelectCountry = (e) => {
-    setSelectedCountry(e.target.value);
-    setIsListOpen(false); 
+    onSelect(e.target.value);
   };
 
   return (
     <div>
-      {isListOpen ? (
-        <select onChange={handleSelectCountry} onBlur={() => setIsListOpen(false)} autoFocus>
-          <option disabled selected value> -- select an option -- </option>
-          {countries.map((countryName, index) => (
-            <option key={index} value={countryName}>
-              {countryName}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <button onClick={() => setIsListOpen(!isListOpen)}>
-          {selectedCountry}
-        </button>
-      )}
+      <select onChange={handleSelectCountry} defaultValue="">
+        <option disabled value=""> -- select a country -- </option>
+        {countries.map((country, index) => (
+          <option key={index} value={country}>
+            {country}
+          </option>
+        ))}
+      </select>
     </div>
   );
 };
