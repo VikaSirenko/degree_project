@@ -4,6 +4,8 @@ import Login from './Login';
 import Registration from './Registration';
 import Main from './Main';
 import CreateService from './CreateService';
+import ServicesList from './ServicesList';
+
 
 function App() {
   return (
@@ -13,6 +15,7 @@ function App() {
         <Route path="/registration" element={<Registration />} />
         <Route path="/main" element={<Main />}/>
         <Route path="/create-service" element={<CreateService />}/>
+        <Route path='/services-list' element={<ServicesList />} />
       </Routes>
     </BrowserRouter>
   );

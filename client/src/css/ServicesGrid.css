@@ -1,0 +1,43 @@
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Create four columns */
+    gap: 16px;
+    padding: 20px;
+    background-color: #f0f0f0;
+  }
+
+.service-card {
+    background-color: #ffffff;
+    border: 2px solid #d0d0d0;
+    border-radius: 8px; /* Optional: Adjust for less rounded corners */
+    padding: 8px; /* Adjust padding for smaller size */
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adjust shadow for subtler effect */
+}
+
+.service-icon img {
+    width: 80%; /* Adjust width for smaller icons */
+    margin: 0 auto; /* Center the icon */
+    display: block; /* To enable margin auto to work */
+    height: auto;
+}
+
+.service-title {
+    font-size: 0.9em; /* Adjust font size for smaller cards */
+    margin-top: 8px;
+}
+
+.service-button {
+    background-color: #6c63ff;
+    color: white;
+    border: none;
+    border-radius: 4px; /* Adjust for less rounded corners */
+    padding: 8px 16px; /* Adjust padding for smaller buttons */
+    margin-top: 8px; /* Adjust margin-top for tighter layout */
+    cursor: pointer;
+    font-size: 0.8em; /* Adjust font size for smaller buttons */
+}
+
+.service-button:hover {
+    background-color: #5035ff;
+}

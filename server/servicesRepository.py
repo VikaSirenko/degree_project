@@ -13,10 +13,16 @@ class ServicesRepository:
         all_services = self.coll.find()
         list_services = []
         for service in all_services:
-            service_obj = Service(service["_id"], service["title"], service["description"],
-                                  service["location"], service["categoryId"], service["countryId"],
-                                  service["userId"])
-            list_services.append(service_obj)
+            service_dict = {
+                "id": str(service["_id"]),  
+                "title": service["title"],
+                "description": service["description"],
+                "location": service["location"],
+                "categoryId": str(service["categoryId"]),  
+                "countryId": str(service["countryId"]),  
+                "userId": str(service["userId"])  
+            }
+            list_services.append(service_dict)
         return list_services
     
 

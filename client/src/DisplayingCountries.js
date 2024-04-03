@@ -28,7 +28,7 @@ const CountriesForm = ({ onSelect }) => {
   return (
     <div className='country-select'>
       <select onChange={handleSelectCountry} defaultValue="">
-        <option disabled value=""> -- select a country -- </option>
+        <option disabled value=""> -- select country -- </option>
         {countries.map((country, index) => (
           <option key={index} value={country}>
             {country}

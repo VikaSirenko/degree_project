@@ -1,8 +1,8 @@
-// Main.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header'; 
 import './css/Main.css';
+
 
 const Main = () => {
   const navigate = useNavigate();
@@ -11,6 +11,8 @@ const Main = () => {
     event.preventDefault();
     // Execute search query
   };
+
+  
 
   return (
     <>

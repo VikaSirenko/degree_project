@@ -30,7 +30,7 @@ const CategoriesForm = ({ onSelect }) => {
   return (
     <div className='category-select'>
       <select onChange={handleSelectCategory} defaultValue="">
-        <option disabled value=""> -- select a category -- </option>
+        <option disabled value=""> -- select category -- </option>
         {categories.map((category, index) => (
           <option key={index} value={category}>
             {category}

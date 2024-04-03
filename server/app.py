@@ -409,5 +409,15 @@ def getCategories():
         return jsonify({'message': 'Error fetching categories'}), 500
 
 
+@app.route('/getServices', methods=['GET'])
+def getServices():
+    try:
+        services = servicesConnection.getListOfServices()
+        return jsonify({'services': services}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'message': 'Error fetching services'}), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=8080)
