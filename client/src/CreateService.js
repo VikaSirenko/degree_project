@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CountriesForm from './DisplayingCountries';
 import CategoriesForm from './DisplayingCategories';
+import Header from './Header'; 
+import './css/CreateService.css';
 
 const CreateService = () => {
   const navigate = useNavigate();
@@ -60,7 +62,7 @@ const CreateService = () => {
 
       if (response.ok) {
         alert('Service created successfully');
-        navigate('/main'); // Redirect user to home or another page
+        navigate('/main'); 
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.message || 'Failed to create service');
@@ -73,16 +75,19 @@ const CreateService = () => {
 
   return (
     <div>
-      <h2>Create Service</h2>
-      {errorMessage && <p className="error">{errorMessage}</p>}
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="title" placeholder="Title" value={serviceData.title} onChange={handleChange} />
-        <input type="text" name="description" placeholder="Description" value={serviceData.description} onChange={handleChange} />
-        <input type="text" name="location" placeholder="Location" value={serviceData.location} onChange={handleChange} />
-        <CategoriesForm onSelect={handleCategorySelect} />
-        <CountriesForm onSelect={handleCountrySelect} />
-        <button type="submit">Create Service</button>
-      </form>
+      <Header onNavigate={navigate} />
+      <div className='create-service-form'>
+        <h2>Create Service</h2>
+        {errorMessage && <p className="error">{errorMessage}</p>}
+        <form onSubmit={handleSubmit}>
+          <input type="text" name="title" placeholder="Title" value={serviceData.title} onChange={handleChange} />
+          <input type="text" name="description" placeholder="Description" value={serviceData.description} onChange={handleChange} />
+          <input type="text" name="location" placeholder="Location" value={serviceData.location} onChange={handleChange} />
+          <CategoriesForm onSelect={handleCategorySelect} />
+          <CountriesForm onSelect={handleCountrySelect} />
+          <button type="submit">Create Service</button>
+        </form>
+      </div>
     </div>
   );
 };

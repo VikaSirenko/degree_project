@@ -6,6 +6,7 @@
   background: url('/Users/vika_sirenko/Documents/degree_project/degree_project/client/src/images/back.webp') no-repeat center center;
   background-size: cover;
   padding: 40px 0;
+  background-color: #f4f4f9; 
 }
 
 .search-form {

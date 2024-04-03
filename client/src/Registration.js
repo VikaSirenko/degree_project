@@ -59,7 +59,7 @@ const Registration = () => {
   };
 
   return (
-    <div className="registration-form">
+    <div className='registration-form'>
       <h2>Registration Form</h2>
       {formValidationMessage && <p className="validation-message">{formValidationMessage}</p>}
       <form onSubmit={handleSubmit}>

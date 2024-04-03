@@ -2,9 +2,9 @@
   font-family: Arial, sans-serif;
   width: 100%;
   max-width: 400px;
-  margin: 50px auto; 
+  margin: 80px auto; 
   padding: 20px;
-  background-color: #f4f4f9;
+  background-color: #f4f4f9; 
   border-radius: 8px; 
   display: flex;
   flex-direction: column;

@@ -23,7 +23,7 @@ function Login() {
             navigate('/main'); 
         } catch (error) {
             console.error('An error occurred!', error);
-            alert("Something went wrong");
+            alert("Something went wrong. Check your email and password.");
         }
     };
 
