@@ -16,7 +16,7 @@ class CountriesRepository:
     
     # find country data by ID
     def getCountryById(self, countryId):              
-        query = {'_id': countryId}
+        query = {'_id': ObjectId(countryId)}
         country = self.coll.find_one(query)
         return country
     

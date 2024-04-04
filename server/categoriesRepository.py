@@ -15,7 +15,7 @@ class CategoriesRepository:
     
     # find category data by ID
     def getCategoryById(self, categoryId):              
-        query = {'_id': categoryId}
+        query = {'_id': ObjectId(categoryId)}
         category = self.coll.find_one(query)
         return category
     

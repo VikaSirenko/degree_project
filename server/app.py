@@ -419,5 +419,24 @@ def getServices():
         return jsonify({'message': 'Error fetching services'}), 500
 
 
+@app.route('/getService/<serviceId>', methods=['GET'])
+def getService(serviceId):
+    try:
+
+        service_dict = servicesConnection.getServiceById(serviceId)
+        category=categoriesConnection.getCategoryById(service_dict['categoryId'])
+        country=countriesConnection.getCountryById(service_dict['countryId'])
+        service_dict['categoryName']=category['categoryName']
+        service_dict['countryName']=country['countryName']
+        if service_dict:
+            return jsonify(service_dict), 200
+        else:
+            return jsonify({'message': 'Service not found'}), 404
+    except Exception as e:
+        print(e)
+        return jsonify({'message': 'Error processing request'}), 500
+
+
+
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=8080)

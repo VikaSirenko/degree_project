@@ -5,6 +5,7 @@ import Registration from './Registration';
 import Main from './Main';
 import CreateService from './CreateService';
 import ServicesList from './ServicesList';
+import ServiceDetails from './ServiceDetails'
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/main" element={<Main />}/>
         <Route path="/create-service" element={<CreateService />}/>
         <Route path='/services-list' element={<ServicesList />} />
+        <Route path="/service/:id" element={<ServiceDetails />} />
       </Routes>
     </BrowserRouter>
   );

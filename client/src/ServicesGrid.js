@@ -1,6 +1,7 @@
 import React from 'react';
 import './css/ServicesGrid.css';
 import beauty from "./images/beauty.webp"
+import { Link } from 'react-router-dom';
 
 const ServiceCard = ({ service }) => {
   return (
@@ -9,7 +10,9 @@ const ServiceCard = ({ service }) => {
         <img src={beauty} alt={service.title} />
       </div>
       <h3 className="service-title">{service.title}</h3>
-      <button className="service-button">Learn More</button>
+      <Link to={`/service/${service.id}`} className="service-button">
+        Learn More
+      </Link>
     </div>
   );
 };

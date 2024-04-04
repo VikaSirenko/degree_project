@@ -1,0 +1,47 @@
+.service-detail-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .service-detail-container h1 {
+    color: #333;
+    font-size: 2em;
+  }
+  
+  .service-detail-container p {
+    color: #666;
+    line-height: 1.6;
+    margin: 10px 0;
+  }
+  
+  .service-image {
+    display: block;
+    width: 300px; 
+    height: 300px; 
+    margin: 20px auto;
+    border-radius: 50%; 
+    object-fit: cover; 
+  }
+  
+  .reserve-button {
+    display: block;
+    background-color: #6c63ff;
+    color: white;
+    padding: 8px 20px; /* Increased padding for a larger button */
+    margin: 20px auto;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.1em; /* Increased font size for larger text */
+  }
+  
+  .reserve-button:hover {
+    background-color: #5035ff;
+  }
+  
+  
