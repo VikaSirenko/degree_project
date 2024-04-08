@@ -334,15 +334,15 @@ def createReview():
         user_data=request.headers.get('authorization')
         data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
         user=usersConnection.getUserByEmail(data['email'])
-        content = request.form
+        content = request.json
         review= Review(0, ObjectId(user['_id']), ObjectId(content['serviceId']), content["rating"], content['comment'], None)
         newId = reviewsConnection.createReview(review, usersConnection, servicesConnection)
         if(newId==None):
-            return  "Review already exists ", 404
+            return  jsonify({'message':"Review already exists "}), 404
         else:
-            return "Review created", 200
+            return jsonify({'message':"Review created"}), 200
     except:
-        return "It is not possible to create a new review", 404
+        return jsonify({'message':"It is not possible to create a new review"}), 404
     
 
 # server function for updating review data
@@ -389,7 +389,8 @@ def deleteReview():
 
     except:
         return "Can not delete", 400
-    
+
+# server function for getting a dictionary of all countries
 @app.route('/getCountries', methods=['GET'])
 def getCountries():
     try:
@@ -399,6 +400,7 @@ def getCountries():
         print(e)
         return jsonify({'message': 'Error fetching countries'}), 500
 
+# server function for getting a dictionary of all categories
 @app.route('/getCategories', methods=['GET'])
 def getCategories():
     try:
@@ -408,7 +410,7 @@ def getCategories():
         print(e)
         return jsonify({'message': 'Error fetching categories'}), 500
 
-
+# server function for getting a dictionary of all services
 @app.route('/getServices', methods=['GET'])
 def getServices():
     try:
@@ -418,7 +420,7 @@ def getServices():
         print(e)
         return jsonify({'message': 'Error fetching services'}), 500
 
-
+# server function for getting service data by id
 @app.route('/getService/<serviceId>', methods=['GET'])
 def getService(serviceId):
     try:
@@ -436,6 +438,26 @@ def getService(serviceId):
         print(e)
         return jsonify({'message': 'Error processing request'}), 500
 
+
+@app.route('/getServiceReviews/<serviceId>', methods=['GET'])
+def getServiceReviews(serviceId):
+    try:
+        reviews = reviewsConnection.getListOfServiceReviews(serviceId)
+        reviews_list = []
+        for review in reviews:
+            review_dict = {
+                "id": str(review.reviewId),
+                "userName": usersConnection.getUserById(str(review.userId))['firstName'],
+                "serviceId": str(review.serviceId),
+                "rating": review.rating,
+                "comment": review.comment,
+                "review_date": review.review_date.isoformat()  
+            }
+            reviews_list.append(review_dict)
+        return jsonify({'reviews': reviews_list}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'message': 'Error fetching service reviews'}), 500
 
 
 if __name__ == '__main__':

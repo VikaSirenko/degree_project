@@ -10,7 +10,7 @@ class ReviewsRepository:
 
     # get all reviews about service 
     def getListOfServiceReviews(self, serviceId):
-        service_reviews = self.coll.find({'serviceId': serviceId})
+        service_reviews = self.coll.find({'serviceId': ObjectId(serviceId)})
         
         list_reviews=[]
         for review in service_reviews:

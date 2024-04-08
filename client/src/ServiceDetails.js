@@ -4,10 +4,12 @@ import './css/ServiceDetails.css';
 import Header from './Header'; 
 import { useNavigate } from 'react-router-dom';
 import beauty from './images/beauty.webp'
+import AddReview from './AddReview';
+import ReviewsSection from './ReviewsSection';
 
 const ServiceDetails = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [service, setService] = useState(null);
   const [error, setError] = useState('');
 
@@ -25,7 +27,7 @@ const ServiceDetails = () => {
       }
     };
 
-    fetchServiceDetail();
+  fetchServiceDetail();
   }, [id]); 
 
   if (error) {
@@ -47,6 +49,8 @@ const ServiceDetails = () => {
         <p><strong>Category:</strong> {service.categoryName}</p>
         <p><strong>Country:</strong> {service.countryName}</p>
         <button onClick={() => {/* Handle reservation logic here */}} className="reserve-button">Reserve</button>
+        <AddReview serviceId={id} />
+        <ReviewsSection serviceId={id} /> 
       </div>
     </>
   );
