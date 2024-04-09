@@ -28,7 +28,7 @@ class ServicesRepository:
 
     #get user's services list by userID
     def getServicesByUserId(self, userId):
-        user_services = self.coll.find({'userId': userId})
+        user_services = self.coll.find({'userId': ObjectId(userId)})
         
         list_services=[]
         for service in user_services:
@@ -110,7 +110,7 @@ class ServicesRepository:
 
     # delete all services that user created by user's ID
     def deleteAllServicesByUserId(self, userId):
-        result = self.coll.delete_many({"userId": userId})
+        result = self.coll.delete_many({"userId": ObjectId(userId)})
         return result.deleted_count
     
 
@@ -122,7 +122,7 @@ class ServicesRepository:
             return "Country not found"              # change ???
         
         countryId = country['_id']
-        services = self.coll.find({"countryId": countryId})
+        services = self.coll.find({"countryId": ObjectId(countryId)})
         return list(services)
     
     
@@ -134,7 +134,7 @@ class ServicesRepository:
             return "Category not found"              # change ???
         
         categoryId = category['_id']
-        services = self.coll.find({"categoryId": categoryId})
+        services = self.coll.find({"categoryId": ObjectId(categoryId)})
         return list(services)
     
     

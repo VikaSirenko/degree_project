@@ -115,4 +115,47 @@
   line-height: 1.5;
 }
 
+.review-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px; 
+  margin-top: 10px;
+}
+
+.review-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.edit-button {
+  background-color: #6c63ff; 
+  color: white;
+}
+
+.delete-button {
+  background-color: #6c63ff; 
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #5035ff;
+}
+
+.delete-button:hover {
+  background-color: #5035ff;
+}
+
+
+
+
+
+
+
+
+
+
 

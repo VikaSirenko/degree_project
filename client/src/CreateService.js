@@ -37,7 +37,6 @@ const CreateService = () => {
       return;
     }
 
-    // Assuming the token is stored in localStorage
     const token = localStorage.getItem('token');
     if (!token) {
       setErrorMessage('You must be logged in to create a service.');

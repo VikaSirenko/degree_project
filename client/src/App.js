@@ -6,6 +6,7 @@ import Main from './Main';
 import CreateService from './CreateService';
 import ServicesList from './ServicesList';
 import ServiceDetails from './ServiceDetails'
+import EditReview from './EditReview';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/create-service" element={<CreateService />}/>
         <Route path='/services-list' element={<ServicesList />} />
         <Route path="/service/:id" element={<ServiceDetails />} />
+        <Route path="/edit-review/:reviewId/:serviceId" element={<EditReview/>} />
       </Routes>
     </BrowserRouter>
   );

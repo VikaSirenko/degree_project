@@ -43,13 +43,15 @@ const ServiceDetails = () => {
       <Header onNavigate={navigate} />
       <div className="service-detail-container">
         <img src={beauty} alt="Service" className="service-image" />
-        <h1>{service.title}</h1>
-        <p><strong>Description:</strong> {service.description}</p>
-        <p><strong>Location:</strong> {service.location}</p>
-        <p><strong>Category:</strong> {service.categoryName}</p>
-        <p><strong>Country:</strong> {service.countryName}</p>
-        <button onClick={() => {/* Handle reservation logic here */}} className="reserve-button">Reserve</button>
-        <AddReview serviceId={id} />
+        <div className="service-info">
+          <h1>{service.title}</h1>
+          <p><strong>Description:</strong> {service.description}</p>
+          <p><strong>Location:</strong> {service.location}</p>
+          <p><strong>Category:</strong> {service.categoryName}</p>
+          <p><strong>Country:</strong> {service.countryName}</p>
+          <button onClick={() => {/* Handle reservation logic here */}} className="reserve-button">Reserve</button>
+          <AddReview serviceId={id} />
+        </div>
         <ReviewsSection serviceId={id} /> 
       </div>
     </>

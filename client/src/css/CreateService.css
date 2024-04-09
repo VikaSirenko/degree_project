@@ -43,33 +43,27 @@
     background-color: #5035ff;
   }
   
-  .error {
+  .error{
     color: rgb(243, 21, 21);
     text-align: center;
     margin-top: 20px; 
   }
 
-
- .country-select select,
- .category-select select {
-  width: calc(100% - 40px);
-  padding: 10px;
-  margin-bottom: 20px; 
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  appearance: none; 
-  background-color: white; 
-  color: #333; 
- }
- .country-select,
- .category-select {
-  width: 110%; 
-  display: flex;
-  justify-content: center;
- }
-
-
-
-
-
+  .country-select select,
+  .category-select select {
+    width: calc(100% - 40px);
+    padding: 10px;
+    margin-bottom: 20px; 
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    appearance: none; 
+    background-color: white; 
+    color: #333; 
+  }
   
+  .country-select,
+  .category-select {
+    width: 110%; 
+    display: flex;
+    justify-content: center;
+  }

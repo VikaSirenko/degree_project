@@ -353,7 +353,7 @@ def updateReview():
         user_data=request.headers.get('authorization')
         data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
         user=usersConnection.getUserByEmail(data['email'])
-        content = request.form
+        content = request.json
         review = reviewsConnection.getReviewById(content['_id'])
         if(user["_id"]==review["userId"]):
             new_review= Review(0, ObjectId(user['_id']), review['serviceId'], content['rating'], content['comment'], review['review_date'])
@@ -376,19 +376,25 @@ def deleteReview():
         user_data=request.headers.get('authorization')
         data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
         user=usersConnection.getUserByEmail(data['email'])
-        content = request.form
+        content = request.json
         review= reviewsConnection.getReviewById(content['_id'])
         if(user["_id"]==review["userId"] or user["_id"]== servicesConnection.getServiceById(review['serviceId'])['userId'] ):
             result=reviewsConnection.deleteReviewById(content['_id'])
             if (result==True):
-                return "Deleted", 200
+                return jsonify({'message':"Deleted"}), 200
             else:
-                return ("Cannot find review to delete"), 404
+                return jsonify({'message':"Cannot find review to delete"}), 404
         else:
-            return("You do not have rights to perform this action"), 403
-
-    except:
-        return "Can not delete", 400
+            raise PermissionError("You do not have rights to perform this action")
+    except PermissionError as pe:
+        app.logger.error(f"Error deleting review: {str(e)}")
+        return jsonify({'message': str(pe)}), 403
+    except ValueError as ve:
+        app.logger.error(f"Error deleting review: {str(e)}")
+        return jsonify({'message': str(ve)}), 404
+    except Exception as e:
+        app.logger.error(f"Error deleting review: {str(e)}")
+        return jsonify({'message': "Cannot delete review"}), 400
 
 # server function for getting a dictionary of all countries
 @app.route('/getCountries', methods=['GET'])
@@ -438,7 +444,7 @@ def getService(serviceId):
         print(e)
         return jsonify({'message': 'Error processing request'}), 500
 
-
+# server function for getting service reviews by  service id
 @app.route('/getServiceReviews/<serviceId>', methods=['GET'])
 def getServiceReviews(serviceId):
     try:
@@ -458,6 +464,38 @@ def getServiceReviews(serviceId):
     except Exception as e:
         print(e)
         return jsonify({'message': 'Error fetching service reviews'}), 500
+
+
+# server function for getting review data for editting
+@app.route('/getReview/<reviewId>', methods=['GET'])
+@token_required
+def get_review(reviewId):
+    try:
+        review = reviewsConnection.getReviewById(reviewId)
+        user_data=request.headers.get('authorization')
+        data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user=usersConnection.getUserByEmail(data['email'])
+        if(user["_id"]==review["userId"]):
+            if review:
+                review_dict = {
+                    "id": str(review["_id"]),  
+                    "userId": str(review["userId"]),
+                    "serviceId": str(review["serviceId"]),
+                    "rating": review["rating"],
+                    "comment": review["comment"],
+                    "review_date": review["review_date"].isoformat() if review.get("review_date") else None
+                }
+                return jsonify(review_dict), 200
+            else:
+                return jsonify({'message': 'Review not found'}), 404
+        else:
+            raise PermissionError("You do not have rights to perform this action")
+    except PermissionError as pe:
+        app.logger.error(f"Error getting review: {str(e)}")
+        return jsonify({'message': str(pe)}), 403
+    except Exception as e:
+        print(e)
+        return jsonify({'message': 'An error occurred getting the review'}), 500
 
 
 if __name__ == '__main__':
