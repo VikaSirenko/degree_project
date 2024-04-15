@@ -11,7 +11,7 @@ class TimeSlotsRepository:
 
     # create time slot and add to database 
     def createTimeSlot(self, timeSlot, serviceConnection):  
-        if(serviceConnection.serviceExistsById(timeSlot.serviceId)==True):                                                    
+        if(serviceConnection.serviceExistsById(timeSlot.serviceId)==True):                                                   
             new_timeSlot={ "serviceId": timeSlot.serviceId, "start_time": timeSlot.start_time, "end_time": timeSlot.end_time, "is_available": timeSlot.is_available}
             result=self.coll.insert_one(new_timeSlot)
             return result.inserted_id

@@ -59,9 +59,10 @@ const CreateService = () => {
         })
       });
 
+      const data = await response.json();
       if (response.ok) {
         alert('Service created successfully');
-        navigate('/main'); 
+        navigate(`/create-time-slot/${data.serviceId}`); 
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.message || 'Failed to create service');

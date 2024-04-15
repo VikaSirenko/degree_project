@@ -149,13 +149,13 @@ def createService():
         country=countriesConnection.getCountryByName(content['countryName'])
         category=categoriesConnection.getCategoryByName(content['categoryName'])
         service = Service(0, content['title'], content['description'], content['location'],category['_id'], country['_id'], user['_id'])
-        newId = servicesConnection.createService(service, categoriesConnection, countriesConnection, usersConnection)
-        if(newId==None):
-            return  "Service already exists ", 404
+        serviceId = servicesConnection.createService(service, categoriesConnection, countriesConnection, usersConnection)
+        if(serviceId==None):
+            return jsonify({'message': "Service already exists"}), 404
         else:
-            return "Service created", 200
-    except:
-        return "It is not possible to create a new service", 404
+            return jsonify({'message': "Service created", 'serviceId': str(serviceId)}), 201
+    except Exception as e:
+        return jsonify({'message': "It is not possible to create a new service", 'error': str(e)}), 500
 
 # server function for deleting service  
 @app.route('/deleteService', methods=['DELETE'])
@@ -167,7 +167,7 @@ def deleteService():
         user=usersConnection.getUserByEmail(data['email'])
         content = request.form
         service= servicesConnection.getServiceById(content['_id'])
-        if(user["_id"]==service["userId"]):
+        if(ObjectId(user["_id"])==ObjectId(service["userId"])):
             result=servicesConnection.deleteServiceByID(content['_id'])
             if (result==True):
                 reviewsConnection.deleteAllServiceReviews(content['_id'])
@@ -193,7 +193,7 @@ def updateService():
         user=usersConnection.getUserByEmail(data['email'])
         content = request.form
         service= servicesConnection.getServiceById(content['_id'])
-        if(user["_id"]==service["userId"]):
+        if(ObjectId(user["_id"])== ObjectId(service["userId"])):
             new_service= Service(0, content['title'], content['description'], content['location'],ObjectId(content['categoryId']), ObjectId(content['countryId']), service["userId"])
             result= servicesConnection.updateService(new_service, service['_id'])
             if(result== True):
@@ -214,19 +214,20 @@ def createTimeSlot():
         user_data=request.headers.get('authorization')
         data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
         user=usersConnection.getUserByEmail(data['email'])
-        content = request.form
+        content = request.json
         service= servicesConnection.getServiceById(content['serviceId'])
-        if(user["_id"]==service["userId"]):
+        if(ObjectId(user["_id"]) == ObjectId(service["userId"])):
             timeSlot = TimeSlot(0, ObjectId(content['serviceId']), content['start_time'], content['end_time'], True)
             newId = timeSlotsConnection.createTimeSlot(timeSlot, servicesConnection)
             if(newId==None):
-                return  "Time slot already exists ", 404
+                return jsonify({"error": "Time slot already exists"}), 409
             else:
-                return "Time slot created", 200
+                return jsonify({"message": "Time slot created"}), 200
         else:
-            return("You do not have rights to perform this action"), 403
-    except:
-        return "It is not possible to create a new time slot", 404
+            return jsonify({"error": "It is not possible to create a new time slot due to an unexpected error"}), 500
+    except Exception as e:
+        print(f"Unexpected error: {str(e)}")
+        return jsonify({"error": "It is not possible to create a new time slot due to an unexpected error"}), 500
 
 
 # server function for deleting time slot 
@@ -239,7 +240,7 @@ def deleteTimeSlot():
         user=usersConnection.getUserByEmail(data['email'])
         content = request.form
         service= servicesConnection.getServiceById(content['serviceId'])
-        if(user["_id"]==service["userId"]):
+        if(ObjectId(user["_id"])== ObjectId(service["userId"])):
             result=timeSlotsConnection.deleteTimeSlotByID(content['_id'])
             if (result==True):
                 return "Deleted", 200
@@ -262,7 +263,7 @@ def updateTimeSlotAvailability():
         user=usersConnection.getUserByEmail(data['email'])
         content = request.form
         service= servicesConnection.getServiceById(content['serviceId'])
-        if(user["_id"]==service["userId"]):
+        if(ObjectId(user["_id"])==ObjectId(service["userId"])):
             result= timeSlotsConnection.updateTimeSlotAvailability(content['is_available'], content['_id'])
             if(result==True):
                 return  "Time slot availability data has been updated", 200
@@ -285,7 +286,7 @@ def createBooking():
         content = request.form
         service= servicesConnection.getServiceById(content['serviceId'])
         timeSlot = timeSlotsConnection.getTimeSlotById(content['slotId'])
-        if(user["_id"]==service["userId"] and service["_id"]==timeSlot["serviceId"] ):
+        if(ObjectId(user["_id"])==ObjectId(service["userId"]) and ObjectId(service["_id"])==ObjectId(timeSlot["serviceId"]) ):
             if(bool(timeSlot['is_available'])==True):
                 booking = Booking(0, user["_id"], ObjectId(content["serviceId"]), ObjectId(content['slotId']), content['booking_date'])
                 newId = bookingsConnection.createBooking(booking, usersConnection, servicesConnection, timeSlotsConnection)
@@ -312,7 +313,7 @@ def deleteBooking():
         user=usersConnection.getUserByEmail(data['email'])
         content = request.form
         booking= bookingsConnection.getBookingById(content['_id'])
-        if(user["_id"]==booking["userId"]):
+        if(ObjectId(user["_id"])==ObjectId(booking["userId"])):
             result=bookingsConnection.deleteBookingByID(content['_id'])
             if (result==True):
                 timeSlotsConnection.updateTimeSlotAvailability(True, booking['slotId'])
@@ -355,7 +356,7 @@ def updateReview():
         user=usersConnection.getUserByEmail(data['email'])
         content = request.json
         review = reviewsConnection.getReviewById(content['_id'])
-        if(user["_id"]==review["userId"]):
+        if(ObjectId(user["_id"])==ObjectId(review["userId"])):
             new_review= Review(0, ObjectId(user['_id']), review['serviceId'], content['rating'], content['comment'], review['review_date'])
             result= reviewsConnection.updateReview(new_review, review['_id'])
             if(result== True):
@@ -378,7 +379,7 @@ def deleteReview():
         user=usersConnection.getUserByEmail(data['email'])
         content = request.json
         review= reviewsConnection.getReviewById(content['_id'])
-        if(user["_id"]==review["userId"] or user["_id"]== servicesConnection.getServiceById(review['serviceId'])['userId'] ):
+        if(ObjectId(user["_id"])==ObjectId(review["userId"]) or ObjectId(user["_id"])== ObjectId(servicesConnection.getServiceById(review['serviceId'])['userId'] )):
             result=reviewsConnection.deleteReviewById(content['_id'])
             if (result==True):
                 return jsonify({'message':"Deleted"}), 200
