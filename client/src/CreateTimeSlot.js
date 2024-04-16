@@ -25,7 +25,7 @@ const CreateTimeSlot = () => {
 
     if (endTime <= startTime) {
       setError('End time must be later than start time.');
-      return; // Stop the form submission
+      return; 
     }
 
     const formattedStartTime = moment(startTime).format('HH:mm');

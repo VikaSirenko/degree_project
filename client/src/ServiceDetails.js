@@ -38,6 +38,10 @@ const ServiceDetails = () => {
     return <div>Loading...</div>;
   }
 
+  const handleReserveClick = () => {
+    navigate(`/reserve/${id}`);
+  };
+
   return (
     <>
       <Header onNavigate={navigate} />
@@ -49,7 +53,7 @@ const ServiceDetails = () => {
           <p><strong>Location:</strong> {service.location}</p>
           <p><strong>Category:</strong> {service.categoryName}</p>
           <p><strong>Country:</strong> {service.countryName}</p>
-          <button onClick={() => {/* Handle reservation logic here */}} className="reserve-button">Reserve</button>
+          <button onClick={handleReserveClick} className="reserve-button">Reserve</button>
           <AddReview serviceId={id} />
         </div>
         <ReviewsSection serviceId={id} /> 

@@ -19,6 +19,7 @@ from datetime import datetime
 from functools import wraps
 from bdConnection import *
 from flask_cors import CORS
+from bson import json_util, ObjectId
 
 
 app = Flask(__name__)
@@ -217,7 +218,7 @@ def createTimeSlot():
         content = request.json
         service= servicesConnection.getServiceById(content['serviceId'])
         if(ObjectId(user["_id"]) == ObjectId(service["userId"])):
-            timeSlot = TimeSlot(0, ObjectId(content['serviceId']), content['start_time'], content['end_time'], True)
+            timeSlot = TimeSlot(0, ObjectId(content['serviceId']), content['start_time'], content['end_time'])
             newId = timeSlotsConnection.createTimeSlot(timeSlot, servicesConnection)
             if(newId==None):
                 return jsonify({"error": "Time slot already exists"}), 409
@@ -252,7 +253,7 @@ def deleteTimeSlot():
     except:
         return "Can not delete", 400
     
-
+"""
 # server function for updating time slot a data
 @app.route('/updateTimeSlotAvailability', methods=['PUT'])
 @token_required
@@ -273,7 +274,7 @@ def updateTimeSlotAvailability():
             return("You do not have rights to perform this action"), 403
     except:
         return "Unable to update time slot availability data", 404
-    
+"""  
 
 # server function for booking creation 
 @app.route('/createBooking', methods=['POST'])
@@ -283,24 +284,22 @@ def createBooking():
         user_data=request.headers.get('authorization')
         data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
         user=usersConnection.getUserByEmail(data['email'])
-        content = request.form
+        content = request.json
         service= servicesConnection.getServiceById(content['serviceId'])
         timeSlot = timeSlotsConnection.getTimeSlotById(content['slotId'])
-        if(ObjectId(user["_id"])==ObjectId(service["userId"]) and ObjectId(service["_id"])==ObjectId(timeSlot["serviceId"]) ):
-            if(bool(timeSlot['is_available'])==True):
-                booking = Booking(0, user["_id"], ObjectId(content["serviceId"]), ObjectId(content['slotId']), content['booking_date'])
-                newId = bookingsConnection.createBooking(booking, usersConnection, servicesConnection, timeSlotsConnection)
-                if(newId==None):
-                    return  "Booking already exists ", 404
-                else:
-                    timeSlotsConnection.updateTimeSlotAvailability(False, content['slotId'])
-                    return "Booking created", 200
+        if(ObjectId(user["_id"])==ObjectId(service["userId"]) and ObjectId(service["id"])==ObjectId(timeSlot["serviceId"]) ):
+            booking = Booking(0, user["_id"], ObjectId(content["serviceId"]), ObjectId(content['slotId']), content['booking_date'])
+            newId = bookingsConnection.createBooking(booking, usersConnection, servicesConnection, timeSlotsConnection)
+            if(newId==None):
+                return jsonify({"error":"Booking already exists "}), 404
             else:
-                return "This service is already booked for this date and time", 404
+                timeSlotsConnection.updateTimeSlotAvailability(False, content['slotId'])
+                return jsonify({"message": "Booking created"}), 200
+            
         else:
-            return("You do not have rights to perform this action"), 403
+            return jsonify({"error":"You do not have rights to perform this action"}), 403
     except:
-        return "It is not possible to create a new booking", 404
+        return jsonify({"error": "It is not possible to create a new booking"}), 404
     
 
 # server function for deleting booking 
@@ -470,7 +469,7 @@ def getServiceReviews(serviceId):
 # server function for getting review data for editting
 @app.route('/getReview/<reviewId>', methods=['GET'])
 @token_required
-def get_review(reviewId):
+def getReview(reviewId):
     try:
         review = reviewsConnection.getReviewById(reviewId)
         user_data=request.headers.get('authorization')
@@ -497,6 +496,33 @@ def get_review(reviewId):
     except Exception as e:
         print(e)
         return jsonify({'message': 'An error occurred getting the review'}), 500
+    
+
+@app.route('/getListOfServicesTimeslots/<serviceId>/<booking_date>')
+def getListOfServiceTimeSlots(serviceId, booking_date):
+    try:
+        timeSlots = timeSlotsConnection.getListOfServicesTimeslots(serviceId)
+        timeSlots_list = []
+        for timeSlot in timeSlots:
+            timeSlots_dict={
+                "id": str(timeSlot.slotId),  
+                "serviceId": str(timeSlot.serviceId),
+                "start_time": str(timeSlot.start_time),
+                "end_time": str(timeSlot.end_time), 
+            }
+            timeSlots_list.append(timeSlots_dict)
+        list_timeSlotsId= bookingsConnection.findBookingTimeSlotsByDate(booking_date)
+        available_timeSlots = [slot for slot in timeSlots_list if slot["id"] not in list_timeSlotsId]
+        print(booking_date)
+        print("start")
+        print(timeSlots_list)
+        print(list_timeSlotsId)
+        print(available_timeSlots)
+        print("finish")
+        return jsonify({'timeSlots': available_timeSlots}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'message': 'Error fetching time slots'}), 500
 
 
 if __name__ == '__main__':

@@ -8,6 +8,7 @@ import ServicesList from './ServicesList';
 import ServiceDetails from './ServiceDetails'
 import EditReview from './EditReview';
 import CreateTimeSlot from './CreateTimeSlot';
+import ReservationPage from './ReservationPage';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/service/:id" element={<ServiceDetails />} />
         <Route path="/edit-review/:reviewId/:serviceId" element={<EditReview/>} />
         <Route path="/create-time-slot/:serviceId" element={<CreateTimeSlot />} />
+        <Route path="/reserve/:id" element={<ReservationPage/>} />
       </Routes>
     </BrowserRouter>
   );

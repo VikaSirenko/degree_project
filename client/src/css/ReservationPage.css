@@ -1,0 +1,105 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.calendar-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.time-slots-container {
+  width: 100%;
+  text-align: center;
+}
+
+.time-slots-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto; 
+  width: 80%; 
+}
+
+.time-slots-list li {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.time-slot-button {
+  padding: 8px 16px;
+  background-color: #6c63ff; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.time-slot-button:hover {
+  background-color: #5035ff; 
+}
+
+.time-slot-button.selected-slot {
+  background-color: #AF40FF; 
+}
+
+.confirm-button {
+  padding: 12px 24px;
+  background-color: #6c63ff; 
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  display: block; 
+  width: 70%; 
+  margin: 20px auto; 
+  font-size: 0.8em; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
+}
+
+.confirm-button:hover {
+  background-color: #5035ff;
+}
+
+
+.error {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Style for individual time slots */
+.time-slots-list li > span {
+  flex: 1; /* Allows the time span to take up more space */
+  text-align: center; /* Centering text within the space */
+}
+
+/* To better center the time information and the button */
+.time-slots-list li {
+  padding-left: 30px; /* Adds padding to the left, adjust as needed */
+  padding-right: 30px; /* Adds padding to the right, adjust as needed */
+}
+
+/* Overrides the background color of the selected date */
+.react-calendar__tile--active,
+.react-calendar__tile--active:enabled {
+    background-color: #6c63ff !important; /* The important flag ensures it overrides any other styles */
+    color: white; /* Sets the text color to white for better readability */
+}
+
+/* Additional styling for hover state on active (selected) date */
+.react-calendar__tile--active:hover,
+.react-calendar__tile--active:enabled:hover {
+    background-color: #5a52cc; /* Slightly darker shade for hover effect */
+}

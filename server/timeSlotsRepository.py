@@ -12,7 +12,7 @@ class TimeSlotsRepository:
     # create time slot and add to database 
     def createTimeSlot(self, timeSlot, serviceConnection):  
         if(serviceConnection.serviceExistsById(timeSlot.serviceId)==True):                                                   
-            new_timeSlot={ "serviceId": timeSlot.serviceId, "start_time": timeSlot.start_time, "end_time": timeSlot.end_time, "is_available": timeSlot.is_available}
+            new_timeSlot={ "serviceId": timeSlot.serviceId, "start_time": timeSlot.start_time, "end_time": timeSlot.end_time}
             result=self.coll.insert_one(new_timeSlot)
             return result.inserted_id
         else:
@@ -20,7 +20,7 @@ class TimeSlotsRepository:
     
     #get list of all time slots that service has
     def getListOfServicesTimeslots(self, serviceId):
-        service_timeSlots = self.coll.find({'serviceId': serviceId})
+        service_timeSlots = self.coll.find({'serviceId': ObjectId(serviceId)})
         
         list_TimeSlots=[]
         for timeSlot in service_timeSlots:
@@ -28,9 +28,9 @@ class TimeSlotsRepository:
             serviceId= timeSlot["serviceId"]
             start_time=timeSlot["start_time"]
             end_time = timeSlot["end_time"]
-            is_available= timeSlot["is_available"]
             
-            serviceTimeSlot= TimeSlot(_id,serviceId, start_time, end_time, is_available)
+            
+            serviceTimeSlot= TimeSlot(_id,serviceId, start_time, end_time)
             list_TimeSlots.append(serviceTimeSlot)
         
         return list_TimeSlots
@@ -44,7 +44,6 @@ class TimeSlotsRepository:
             'serviceId': timeSlot.serviceId,
             'start_time': timeSlot.start_time,
             'end_time': timeSlot.end_time,
-            'is_available': timeSlot.is_available
         }}
         )
 
@@ -53,7 +52,7 @@ class TimeSlotsRepository:
         else:
             return False
         
-        
+    """
     # update time slot's  availability data using ID
     def updateTimeSlotAvailability(self , is_available , timeSlotId):          
         result = self.coll.update_one(
@@ -66,8 +65,7 @@ class TimeSlotsRepository:
             return True
         else:
             return False
-
-
+    """
     # delete time slot by ID
     def deleteTimeSlotByID(self, timeSlotId):                       
         result = self.coll.delete_one({'_id':ObjectId(timeSlotId)})

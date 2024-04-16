@@ -1,15 +1,14 @@
 from datetime import datetime, timedelta
 
 class TimeSlot:
-    def __init__(self, _id, serviceId, start_time, end_time, is_available):
+    def __init__(self, _id, serviceId, start_time, end_time):
         self.__id = _id
         self.__serviceId = serviceId
         self.start_time = start_time
         self.end_time = end_time
-        self.is_available = is_available
-
+        
     @property
-    def sloId(self):
+    def slotId(self):
         return self.__id
 
     @property
