@@ -29,20 +29,18 @@ class ServicesRepository:
     #get user's services list by userID
     def getServicesByUserId(self, userId):
         user_services = self.coll.find({'userId': ObjectId(userId)})
-        
-        list_services=[]
+        list_services = []
         for service in user_services:
-            _id=service["_id"]
-            title =service["title"]
-            description= service["description"]
-            location=service["location"]
-            categoryId = service["categoryId"]
-            countryId = service["countryId"]
-            userId = service["userId"]
-            
-            userService= Service(_id,title, description, location, categoryId, countryId, userId)
-            list_services.append(userService)
-        
+            service_dict = {
+                "id": str(service["_id"]),  
+                "title": service["title"],
+                "description": service["description"],
+                "location": service["location"],
+                "categoryId": str(service["categoryId"]),  
+                "countryId": str(service["countryId"]),  
+                "userId": str(service["userId"])  
+            }
+            list_services.append(service_dict)
         return list_services
     
     # check whether the service with the ID exists

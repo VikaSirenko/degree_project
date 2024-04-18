@@ -98,7 +98,7 @@ const ReservationPage = () => {
           />
         </div>
         <div className="time-slots-container">
-          <h2>Available Time Slots:</h2>
+          <h2>Available Time:</h2>
           {timeSlots.length > 0 ? (
             <ul className="time-slots-list">
               {timeSlots.map(slot => (

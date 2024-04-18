@@ -15,7 +15,7 @@ const ReviewsSection = ({ serviceId }) => {
   const fetchReviews = async () => {
     try {
       const response = await fetch(`http://localhost:8080/getServiceReviews/${serviceId}`, {
-        headers: { 'Authorization': `Bearer ${token}` },
+        headers: { 'authorization': token ,}
       });
       if (!response.ok) throw new Error('Failed to fetch reviews');
       const data = await response.json();

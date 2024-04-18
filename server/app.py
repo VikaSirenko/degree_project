@@ -127,15 +127,19 @@ def updateUser():
         user_data=request.headers.get('authorization')
         data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
         old_user=usersConnection.getUserByEmail(data['email'])
-        content = request.form  
-        new_user= User(0, content['firstName'], content['lastName'], content['email'], content['password'])
+        content = request.json 
+        hash_password= True
+        if(content['password']==''):
+            content['password']=old_user['password']
+            hash_password=False
+        new_user= User(0, content['firstName'], content['lastName'], content['email'], content['password'], hash_password)
         result= usersConnection.updateUser(new_user, old_user['_id'])
         if(result== True):
-            return  "User data has been updated", 200
+            return jsonify({'message':"User data has been updated"}), 200
         else:
-            return "User data has not been updated", 404
+            return jsonify({'error':"User data has not been updated"}), 404
     except:
-        return "Unable to update user data", 404
+        return jsonify({'error':"Unable to update user data"}), 404
 
 
 # server function for service creation 
@@ -152,11 +156,11 @@ def createService():
         service = Service(0, content['title'], content['description'], content['location'],category['_id'], country['_id'], user['_id'])
         serviceId = servicesConnection.createService(service, categoriesConnection, countriesConnection, usersConnection)
         if(serviceId==None):
-            return jsonify({'message': "Service already exists"}), 404
+            return jsonify({'error': "Service already exists"}), 404
         else:
             return jsonify({'message': "Service created", 'serviceId': str(serviceId)}), 201
     except Exception as e:
-        return jsonify({'message': "It is not possible to create a new service", 'error': str(e)}), 500
+        return jsonify({'error': "It is not possible to create a new service", 'error': str(e)}), 500
 
 # server function for deleting service  
 @app.route('/deleteService', methods=['DELETE'])
@@ -498,6 +502,7 @@ def getReview(reviewId):
         return jsonify({'message': 'An error occurred getting the review'}), 500
     
 
+# get list of available time slots for choosen date for service 
 @app.route('/getListOfServicesTimeslots/<serviceId>/<booking_date>')
 def getListOfServiceTimeSlots(serviceId, booking_date):
     try:
@@ -513,16 +518,50 @@ def getListOfServiceTimeSlots(serviceId, booking_date):
             timeSlots_list.append(timeSlots_dict)
         list_timeSlotsId= bookingsConnection.findBookingTimeSlotsByDate(booking_date)
         available_timeSlots = [slot for slot in timeSlots_list if slot["id"] not in list_timeSlotsId]
-        print(booking_date)
-        print("start")
-        print(timeSlots_list)
-        print(list_timeSlotsId)
-        print(available_timeSlots)
-        print("finish")
         return jsonify({'timeSlots': available_timeSlots}), 200
     except Exception as e:
         print(e)
         return jsonify({'message': 'Error fetching time slots'}), 500
+
+# get user data 
+@app.route('/getUserData', methods=['GET'])
+@token_required
+def getUserData():
+    try:
+        user_data=request.headers.get('authorization')
+        data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user=usersConnection.getUserByEmail(data['email'])
+        if user:
+            user_dict = {
+                "id": str(user["_id"]),  
+                "firstName": user["firstName"],
+                "lastName": user["lastName"],
+                "email": user["email"],
+            }
+            return jsonify(user_dict), 200
+        else:
+            return jsonify({'message': 'User not found'}), 404
+    except Exception as e:
+        print(f"Error retrieving user data: {e}")
+        return jsonify({"message": "An error occurred while fetching user data"}), 500
+
+
+@app.route('/getUserServices', methods=['GET'])
+def getUserServices():
+    try:
+        user_data = request.headers.get('authorization')
+        data = jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user = usersConnection.getUserByEmail(data['email'])  
+        
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        services = servicesConnection.getServicesByUserId(user['_id'])
+        return jsonify({'services': services}), 200
+
+    except Exception as e:
+        print(e)  
+        return jsonify({'message': 'Unable to retrieve services'}), 500
 
 
 if __name__ == '__main__':

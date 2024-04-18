@@ -9,6 +9,9 @@ import ServiceDetails from './ServiceDetails'
 import EditReview from './EditReview';
 import CreateTimeSlot from './CreateTimeSlot';
 import ReservationPage from './ReservationPage';
+import UserProfile from './UserProfile';
+import EditProfile from './EditProfile';
+import UserServices from './UserServices';
 
 
 function App() {
@@ -24,6 +27,9 @@ function App() {
         <Route path="/edit-review/:reviewId/:serviceId" element={<EditReview/>} />
         <Route path="/create-time-slot/:serviceId" element={<CreateTimeSlot />} />
         <Route path="/reserve/:id" element={<ReservationPage/>} />
+        <Route path='/user-profile' element ={<UserProfile/>} />
+        <Route path='/edit-profile/:id' element={<EditProfile/>} />
+        <Route path='/user-services' element={<UserServices/>} />
       </Routes>
     </BrowserRouter>
   );

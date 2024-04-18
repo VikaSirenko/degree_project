@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-// Додано пропс onSelect для передачі вибраної категорії назад до батьківського компонента
 const CategoriesForm = ({ onSelect }) => {
   const [categories, setCategories] = useState([]);
 
@@ -23,7 +22,6 @@ const CategoriesForm = ({ onSelect }) => {
   };
 
   const handleSelectCategory = (e) => {
-    // Використання пропса onSelect для відправлення вибраної категорії
     onSelect(e.target.value);
   };
 

@@ -24,8 +24,8 @@ const ServicesList = () => {
         throw new Error(`Failed to fetch services: ${response.status}`);
       }
       const data = await response.json();
-      setServices(data.services); // Save the full list of services
-      setTotalPages(Math.ceil(data.services.length / ServicesPerPage)); // Calculate total pages based on the full list
+      setServices(data.services); 
+      setTotalPages(Math.ceil(data.services.length / ServicesPerPage)); 
     } catch (err) {
       console.error(err);
       setError(err.message);
@@ -40,7 +40,7 @@ const ServicesList = () => {
     setCurrentPage(prev => Math.min(prev + 1, totalPages));
   };
 
-  // Calculate the services to display based on the current page
+  
   const indexOfLastService = currentPage * ServicesPerPage;
   const indexOfFirstService = indexOfLastService - ServicesPerPage;
   const currentServices = services.slice(indexOfFirstService, indexOfLastService);

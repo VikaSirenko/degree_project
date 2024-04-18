@@ -79,27 +79,27 @@
   margin-top: 10px;
 }
 
-/* Style for individual time slots */
+
 .time-slots-list li > span {
-  flex: 1; /* Allows the time span to take up more space */
-  text-align: center; /* Centering text within the space */
+  flex: 1; 
+  text-align: center; 
 }
 
-/* To better center the time information and the button */
+
 .time-slots-list li {
-  padding-left: 30px; /* Adds padding to the left, adjust as needed */
-  padding-right: 30px; /* Adds padding to the right, adjust as needed */
+  padding-left: 30px; 
+  padding-right: 30px;
 }
 
-/* Overrides the background color of the selected date */
+
 .react-calendar__tile--active,
 .react-calendar__tile--active:enabled {
-    background-color: #6c63ff !important; /* The important flag ensures it overrides any other styles */
-    color: white; /* Sets the text color to white for better readability */
+    background-color: #6c63ff !important; 
+    color: white; 
 }
 
-/* Additional styling for hover state on active (selected) date */
+
 .react-calendar__tile--active:hover,
 .react-calendar__tile--active:enabled:hover {
-    background-color: #5a52cc; /* Slightly darker shade for hover effect */
+    background-color: #5a52cc; 
 }
