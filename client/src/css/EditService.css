@@ -1,4 +1,4 @@
-.edit-profile-container {
+.edit-service-container {
     font-family: 'Arial', sans-serif;
     max-width: 600px;
     margin: auto;
@@ -7,30 +7,39 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
-  }
-  
-  .edit-profile-container h1 {
+}
+
+.edit-service-container h1 {
     color: #333;
     margin-bottom: 20px;
-  }
-  
-  .edit-profile-container label {
+}
+
+.edit-service-container label {
     display: block;
     margin-bottom: 15px;
     color: #333;
-  }
-  
-  .edit-profile-container input[type="text"],
-  .edit-profile-container input[type="email"],
-  .edit-profile-container input[type="password"] {
+}
+
+.edit-service-container input[type="text"] {
     width: 95%;
     padding: 8px;
     margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
-  }
-  
-  .edit-profile-container button {
+}
+
+.edit-service-container select {
+    width: 90%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-left: 5px;  
+    margin-right: auto; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: block; 
+}
+
+.edit-service-container button {
     background-color: #6c63ff;
     color: white;
     padding: 10px 20px;
@@ -38,17 +47,16 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    display: block; 
-    margin: 20px auto; 
-  }
-  
-  .edit-profile-container button:hover {
+    display: block;
+    margin: 20px auto;
+}
+
+.edit-service-container button:hover {
     background-color: #5035ff;
-  }
-  
-  .error {
+}
+
+.error {
     color: red;
     text-align: center;
     margin-top: 10px;
-  }
-  
+}

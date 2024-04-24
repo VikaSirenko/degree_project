@@ -42,7 +42,7 @@
 }
 
 .validation-message {
-  color: rgb(243, 21, 21);
+  color: red;
   text-align: center;
   margin: 10px 0;
 }

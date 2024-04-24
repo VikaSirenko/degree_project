@@ -12,6 +12,7 @@ import ReservationPage from './ReservationPage';
 import UserProfile from './UserProfile';
 import EditProfile from './EditProfile';
 import UserServices from './UserServices';
+import EditService from './EditService';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
         <Route path='/user-profile' element ={<UserProfile/>} />
         <Route path='/edit-profile/:id' element={<EditProfile/>} />
         <Route path='/user-services' element={<UserServices/>} />
+        <Route path='/edit-service/:serviceId' element={<EditService/>} />
       </Routes>
     </BrowserRouter>
   );

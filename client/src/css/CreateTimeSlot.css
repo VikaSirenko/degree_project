@@ -51,7 +51,7 @@
 }
 
 .error {
-  color: rgb(243, 21, 21);
+  color: red;
   text-align: center;
   margin-top: 20px;
 }

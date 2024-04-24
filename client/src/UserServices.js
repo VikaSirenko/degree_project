@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
-import UserServicesGrid from './UserServicesGrid'; // Ensure this path is correct
+import UserServicesGrid from './UserServicesGrid'; 
 import "./css/ServicesList.css"; 
 import "./css/UserServices.css"; 
 

@@ -189,26 +189,28 @@ def deleteService():
     
 
 # server function for updating service data
-@app.route('/updateService', methods=['PUT'])
+@app.route('/updateService/<serviceId>', methods=['PUT'])
 @token_required
-def updateService():
+def updateService(serviceId):
     try:
         user_data=request.headers.get('authorization')
         data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
         user=usersConnection.getUserByEmail(data['email'])
-        content = request.form
-        service= servicesConnection.getServiceById(content['_id'])
+        content = request.json
+        country=countriesConnection.getCountryByName(content['countryName'])
+        category=categoriesConnection.getCategoryByName(content['categoryName'])
+        service= servicesConnection.getServiceById(serviceId)
         if(ObjectId(user["_id"])== ObjectId(service["userId"])):
-            new_service= Service(0, content['title'], content['description'], content['location'],ObjectId(content['categoryId']), ObjectId(content['countryId']), service["userId"])
-            result= servicesConnection.updateService(new_service, service['_id'])
+            new_service= Service(0, content['title'], content['description'], content['location'],category['_id'], country['_id'], ObjectId(service["userId"]))
+            result= servicesConnection.updateService(new_service, ObjectId(serviceId))
             if(result== True):
-                return  "Service data has been updated", 200
+                return  jsonify({'message':"Service data has been updated"}), 200
             else:
-                return "Service data has not been updated", 404
+                return jsonify({'error':"Service data has not been updated"}), 404
         else:
-            return("You do not have rights to perform this action"), 403
-    except:
-        return "Unable to update service data", 404
+            return jsonify({'error':"You do not have rights to perform this action"}), 403
+    except Exception as e:
+        return jsonify({'error': "It is not possible to update a service", 'error': str(e)}), 500
     
 
 # server function for time slot creation 
