@@ -7,12 +7,9 @@ const Header = ({ onNavigate }) => {
 
   const handleAuthClick = () => {
     if (token) {
-      // Perform sign out operations like removing the token
       localStorage.removeItem('token');
-      // Navigate to home or sign-in page
       onNavigate('/');
     } else {
-      // Navigate to sign-in page if not signed in
       onNavigate('/');
     }
   };

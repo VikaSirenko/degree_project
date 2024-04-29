@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './css/UserProfile.css'; 
 import Header from './Header';
 import user_profile from './images/user_profile.webp'
+import Footer from './Footer';
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -80,6 +81,7 @@ const UserProfile = () => {
           <button onClick={viewMyReservations}>View My Reservations</button>
         </div>
       </div>
+      <Footer onNavigate={navigate} />
     </>
   );
 

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './css/EditReview.css'; 
+import Header from './Header';
+import Footer from './Footer';
 
 const EditReview = () => {
   const { reviewId, serviceId } = useParams();
@@ -76,6 +78,8 @@ const EditReview = () => {
   };
 
   return (
+    <>
+    <Header onNavigate={navigate} />
     <div className="edit-review-form">
       <h2>Edit Review</h2>
       {error && <p className="error">{error}</p>}
@@ -100,6 +104,8 @@ const EditReview = () => {
         <button type="submit" disabled={!token}>Update Review</button>
       </form>
     </div>
+    <Footer onNavigate={navigate} />
+    </>
   );
 };
 

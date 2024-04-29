@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import ServicesGrid from './ServicesGrid';
-import "./css/ServicesList.css"
+import "./css/ServicesList.css";
+import Footer from './Footer';
+
 
 const ServicesPerPage = 16;
 
@@ -59,6 +61,7 @@ const ServicesList = () => {
           Next
         </button>
       </div>
+      <Footer onNavigate={navigate} />
     </>
   );
 };

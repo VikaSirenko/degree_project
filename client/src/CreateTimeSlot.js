@@ -5,6 +5,7 @@ import Header from './Header';
 import { useNavigate, useParams } from 'react-router-dom';
 import './css/CreateTimeSlot.css';
 import moment from 'moment';
+import Footer from './Footer';
 
 const CreateTimeSlot = () => {
   const navigate = useNavigate();
@@ -111,6 +112,7 @@ const CreateTimeSlot = () => {
           </ul>
         </div>
       </div>
+      <Footer onNavigate={navigate} />
     </>
   );
 };

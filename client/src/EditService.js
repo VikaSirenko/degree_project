@@ -4,6 +4,7 @@ import CountriesForm from './DisplayingCountries';
 import CategoriesForm from './DisplayingCategories';
 import Header from './Header';
 import './css/EditService.css';
+import Footer from './Footer';
 
 const EditService = () => {
   const { serviceId } = useParams();
@@ -216,6 +217,7 @@ const EditService = () => {
           )}
         </div>
       </div>
+      <Footer onNavigate={navigate} />
     </div>
   );
 };

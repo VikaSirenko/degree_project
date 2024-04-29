@@ -4,6 +4,7 @@ import CountriesForm from './DisplayingCountries';
 import CategoriesForm from './DisplayingCategories';
 import Header from './Header'; 
 import './css/CreateService.css';
+import Footer from './Footer';
 
 const CreateService = () => {
   const navigate = useNavigate();
@@ -88,6 +89,7 @@ const CreateService = () => {
           <button type="submit">Create Service</button>
         </form>
       </div>
+      <Footer onNavigate={navigate} />
     </div>
   );
 };

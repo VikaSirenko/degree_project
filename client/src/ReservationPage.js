@@ -4,6 +4,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import Header from './Header';
 import './css/ReservationPage.css';
+import Footer from './Footer';
 
 const ReservationPage = () => {
   const navigate = useNavigate();
@@ -129,6 +130,7 @@ const ReservationPage = () => {
           </div>
         )}
       </div>
+      <Footer onNavigate={navigate} />
     </>
   );
 };

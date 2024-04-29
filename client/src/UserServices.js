@@ -4,6 +4,7 @@ import Header from './Header';
 import UserServicesGrid from './UserServicesGrid'; 
 import "./css/ServicesList.css"; 
 import "./css/UserServices.css"; 
+import Footer from './Footer';
 
 const UserServices = () => {
   const navigate = useNavigate();
@@ -109,6 +110,7 @@ const UserServices = () => {
           <p>No services found.</p>
         )}
       </div>
+      <Footer onNavigate={navigate} />
     </>
   );
 };

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import beauty from './images/beauty.webp'
 import AddReview from './AddReview';
 import ReviewsSection from './ReviewsSection';
+import Footer from './Footer';
 
 const ServiceDetails = () => {
   const navigate = useNavigate();
@@ -58,6 +59,7 @@ const ServiceDetails = () => {
         </div>
         <ReviewsSection serviceId={id} /> 
       </div>
+      <Footer onNavigate={navigate} />
     </>
   );
 };

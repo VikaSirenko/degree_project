@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './css/EditProfile.css'; 
 import Header from './Header';
+import Footer from './Footer';
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -136,6 +137,7 @@ const EditProfile = () => {
             <button type="submit">Update Profile</button>
         </form>
         </div>
+        <Footer onNavigate={navigate} />
     </>
   );
 };
