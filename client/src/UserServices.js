@@ -49,6 +49,10 @@ const UserServices = () => {
     navigate(`/edit-service/${serviceId}`);
   };
 
+  const handleInfoService = (serviceId) => {
+    navigate(`/service/${serviceId}`);
+  };
+
   const handleDeleteService = async (serviceId) => {
     const token = localStorage.getItem('token'); 
     try {
@@ -69,6 +73,10 @@ const UserServices = () => {
       console.error('Error deleting service:', err);
       setError(err.message);
     }
+  };
+
+  const handleViewAvailability = (serviceId) => {
+    
   };
 
   if (isLoading) {
@@ -92,8 +100,10 @@ const UserServices = () => {
         {services.length > 0 ? (
           <UserServicesGrid 
             services={services}
+            onInfoService={handleInfoService}
             onEditService={handleEditService}  
             onDeleteService={handleDeleteService}
+            onViewAvailability={handleViewAvailability}
           />
         ) : (
           <p>No services found.</p>

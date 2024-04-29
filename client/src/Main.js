@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header'; 
 import './css/Main.css';
+import Footer from './Footer';
 
 
 const Main = () => {
@@ -23,6 +24,7 @@ const Main = () => {
           <button type="submit" className="search-button">Search</button>
         </form>
       </div>
+      <Footer onNavigate={navigate} />
     </>
   );
 };

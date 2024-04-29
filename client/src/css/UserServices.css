@@ -61,7 +61,7 @@
     margin-top: 5px; 
 }
 
-.user-service-button, .user-edit-button, .user-delete-button {
+.user-service-button, .user-edit-button, .user-delete-button, .user-availability-button {
     background-color: #6c63ff;
     color: white;
     border: none;
@@ -73,7 +73,7 @@
     
 }
 
-.user-service-button:hover, .user-edit-button:hover, .user-delete-button:hover {
+.user-service-button:hover, .user-edit-button:hover, .user-delete-button:hover,  .user-availability-button:hover {
     background-color: #5035ff; 
 }
 

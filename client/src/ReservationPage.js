@@ -60,6 +60,11 @@ const ReservationPage = () => {
       return;
     }
 
+    if (!token) {
+      setError('You must be logged in to create a booking.');
+      return;
+    }
+
     const offset = selectedDate.getTimezoneOffset() * 60000; 
     const bookingDate = new Date(selectedDate.getTime() - offset).toISOString().split('T')[0];
     try {

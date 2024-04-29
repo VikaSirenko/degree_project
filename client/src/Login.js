@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate, Link } from 'react-router-dom'; 
 import './css/Login.css';
 import logo from './images/logo.webp';
 
@@ -50,6 +50,9 @@ function Login() {
                 <button type="submit" className="login-btn">Sign In</button>
                 <button type="button" className="login-btn registration-btn" onClick={() => navigate('/registration')}>Registration</button>
             </form>
+            <div className="login-footer">
+                <Link to="/main" className="home-link">Go to Main Page</Link>
+            </div>
         </div>
     );
 }

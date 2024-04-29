@@ -104,10 +104,10 @@ def admin_token_required(f):
 
 # server function for deleting user   
 @app.route('/deleteUser', methods=['DELETE'])
-@admin_token_required
+@token_required
 def deleteUser():
     try:
-        content = request.form 
+        content = request.json
         result=usersConnection.deleteUserByID(content['_id'])
         if (result):
                 servicesConnection.deleteAllServicesByUserId(content["_id"])
@@ -245,19 +245,21 @@ def deleteTimeSlot():
         user_data=request.headers.get('authorization')
         data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
         user=usersConnection.getUserByEmail(data['email'])
-        content = request.form
+        content = request.json
         service= servicesConnection.getServiceById(content['serviceId'])
         if(ObjectId(user["_id"])== ObjectId(service["userId"])):
             result=timeSlotsConnection.deleteTimeSlotByID(content['_id'])
             if (result==True):
-                return "Deleted", 200
+                return jsonify({"message":"Deleted"}), 200
             else:
-                return ("Cannot find time slot to delete"), 404
+                return jsonify({"error":"Cannot find time slot to delete"}), 404
         else:
-            return("You do not have rights to perform this action"), 403
+            return jsonify({"error":"You do not have rights to perform this action"}), 403
 
-    except:
-        return "Can not delete", 400
+    except Exception as e:
+        print(f"Unexpected error: {str(e)}")
+        return jsonify({"error": "It is not possible to delete a time slot due to an unexpected error"}), 500
+
     
 """
 # server function for updating time slot a data
@@ -564,6 +566,25 @@ def getUserServices():
     except Exception as e:
         print(e)  
         return jsonify({'message': 'Unable to retrieve services'}), 500
+    
+# get list of all time slots for choosen date for service 
+@app.route('/getListOfAllServicesTimeslots/<serviceId>')
+def getListOfAllServiceTimeSlots(serviceId):
+    try:
+        timeSlots = timeSlotsConnection.getListOfServicesTimeslots(serviceId)
+        timeSlots_list = []
+        for timeSlot in timeSlots:
+            timeSlots_dict={
+                "id": str(timeSlot.slotId),  
+                "serviceId": str(timeSlot.serviceId),
+                "start_time": str(timeSlot.start_time),
+                "end_time": str(timeSlot.end_time), 
+            }
+            timeSlots_list.append(timeSlots_dict)
+        return jsonify({'timeSlots': timeSlots_list}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'message': 'Error fetching time slots'}), 500
 
 
 if __name__ == '__main__':

@@ -40,6 +40,7 @@ const ReviewsSection = ({ serviceId }) => {
       if (!response.ok) throw new Error('Failed to delete review. You do not have rights to perform this action.');
       alert('Review deleted successfully');
       fetchReviews(); 
+      window.location.reload();
     } catch (err) {
       console.error('Error deleting review:', err);
       setError(err.message || 'Failed to delete review');

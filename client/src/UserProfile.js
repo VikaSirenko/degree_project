@@ -58,7 +58,7 @@ const UserProfile = () => {
   };
 
   if (!user) {
-    return <div>Loading...</div>;
+    return <div>Please log in or register to view your profile...</div>;
   }
 
   return (

@@ -35,6 +35,7 @@ const AddReview = ({ serviceId }) => {
         setRating('1'); 
         setComment('');
         setErrorMessage('');
+        window.location.reload();
       } else {
         alert('Failed to add review');
       }

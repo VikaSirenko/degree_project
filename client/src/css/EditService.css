@@ -1,62 +1,111 @@
 .edit-service-container {
-    font-family: 'Arial', sans-serif;
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center;
+  font-family: 'Arial', sans-serif;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-.edit-service-container h1 {
-    color: #333;
-    margin-bottom: 20px;
+.edit-service-container h2 {
+  color: #333;
+  margin-bottom: 15px;
 }
 
 .edit-service-container label {
-    display: block;
-    margin-bottom: 15px;
-    color: #333;
+  display: block;
+  margin-bottom: 10px;
+  color: #333;
 }
 
-.edit-service-container input[type="text"] {
-    width: 95%;
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.edit-service-container input[type="text"]{
+  width: 95%;
+  padding: 12px;
+  margin-top: 8px;
+  margin-bottom: 15px; 
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .edit-service-container select {
-    width: 90%;
-    padding: 8px;
-    margin-top: 5px;
-    margin-left: 5px;  
-    margin-right: auto; 
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    display: block; 
+  width: 90%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-left: 5px;  
+  margin-right: auto; 
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: block; 
 }
 
+
+
 .edit-service-container button {
-    background-color: #6c63ff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    display: block;
-    margin: 20px auto;
+  background-color: #6c63ff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 50%; 
+  margin: 15px auto; 
 }
 
 .edit-service-container button:hover {
-    background-color: #5035ff;
+  background-color: #5035ff;
 }
 
 .error {
-    color: red;
-    text-align: center;
-    margin-top: 10px;
+  color: red;
+  text-align: center;
+  margin-top: 10px;
 }
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 30px; 
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 50%; 
+  margin: auto;
+}
+
+.modal-content p {
+  margin-bottom: 20px; 
+}
+
+.button-container {
+  display: flex;
+  gap: 20px; 
+  justify-content: center; 
+}
+
+.modal-content button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #6c63ff;
+  color: white;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #5035ff;
+}
+

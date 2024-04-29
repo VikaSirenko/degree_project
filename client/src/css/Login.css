@@ -73,3 +73,20 @@
   padding: 20px;
   box-sizing: border-box;
 }
+
+
+.login-footer {
+  text-align: center;
+  padding: 20px;
+}
+
+.home-link {
+  text-decoration: none;
+  color: #6c63ff; 
+  font-weight: bold;
+}
+
+.home-link:hover {
+  color: #5035ff; 
+  text-decoration: underline; 
+}
