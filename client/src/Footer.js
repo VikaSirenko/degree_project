@@ -1,5 +1,7 @@
 import React from 'react';
 import './css/Footer.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 
 const Footer = () => {
   return (
@@ -13,22 +15,21 @@ const Footer = () => {
           <h2>Contact Us</h2>
           <ul>
             <li><a href="/main">Home</a></li>
-            <li><a href="#">About</a></li>
+            <li><a href="/about-page">About</a></li>
             <li><a href="/services-list">Services</a></li>
-            <li><a href="#">Contact</a></li>
           </ul>
         </div>
         <div className="footer-section social">
           <h2>Follow Us</h2>
           <div className="social-links">
-            <a href="/main"><i className="fab fa-facebook-f"></i></a>
-            <a href="#"><i className="fab fa-twitter"></i></a>
-            <a href="#"><i className="fab fa-instagram"></i></a>
+            <a href="https://www.facebook.com/fpm.kpi.ua/" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook-f"></i></a>
+            <a href="https://twitter.com/bts_bighit?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor" target="_blank" rel="noopener noreferrer"><i className="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/vika_sirenko_/" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram"></i></a>
           </div>
         </div>
       </div>
       <div className="footer-bottom">
-        &copy; yourwebsite.com | Designed by Vika Sirenko
+        &copy; reserveHub.com | Designed by Vika Sirenko
       </div>
     </footer>
   );

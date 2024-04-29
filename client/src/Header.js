@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './images/logo.webp';
 import './css/Header.css';
 
+
 const Header = ({ onNavigate }) => {
   const token = localStorage.getItem('token');
 
@@ -13,9 +14,12 @@ const Header = ({ onNavigate }) => {
       onNavigate('/');
     }
   };
+
   return (
     <header className="header">
-      <img src={logo} alt="Logo" className="site-logo" />
+      <button onClick={() => onNavigate('/main')} className="logo-button">
+        <img src={logo} alt="Logo" className="site-logo" />
+      </button>
       <button onClick={() => onNavigate('/create-service')} className="header-button">Create Service</button>
       <button onClick={() => onNavigate('/services-list')} className="header-button">All Services</button> 
       <button className="header-button">Change Language</button> {/* Assuming future implementation */}

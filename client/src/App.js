@@ -13,6 +13,7 @@ import UserProfile from './UserProfile';
 import EditProfile from './EditProfile';
 import UserServices from './UserServices';
 import EditService from './EditService';
+import AboutPage from './AboutPage';
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
         <Route path='/edit-profile/:id' element={<EditProfile/>} />
         <Route path='/user-services' element={<UserServices/>} />
         <Route path='/edit-service/:serviceId' element={<EditService/>} />
+        <Route path='/about-page' element={<AboutPage/>} />
       </Routes>
     </BrowserRouter>
   );
