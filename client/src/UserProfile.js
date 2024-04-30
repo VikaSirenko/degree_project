@@ -55,7 +55,7 @@ const UserProfile = () => {
   };
 
   const viewMyReservations = () => {
-    navigate(`/my-reservations/${user.id}`);
+    navigate(`/user-bookings/${user.id}`);
   };
 
   if (!user) {

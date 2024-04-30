@@ -318,20 +318,21 @@ def deleteBooking():
         user_data=request.headers.get('authorization')
         data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
         user=usersConnection.getUserByEmail(data['email'])
-        content = request.form
+        content = request.json
         booking= bookingsConnection.getBookingById(content['_id'])
         if(ObjectId(user["_id"])==ObjectId(booking["userId"])):
             result=bookingsConnection.deleteBookingByID(content['_id'])
             if (result==True):
                 timeSlotsConnection.updateTimeSlotAvailability(True, booking['slotId'])
-                return "Deleted", 200
+                return  jsonify({'message':"Booking deleted"}), 404
             else:
-                return ("Cannot find time slot to delete"), 404
+                return  jsonify({'error':"Cannot find time slot to delete"}), 404
         else:
-            return("You do not have rights to perform this action"), 403
+            return  jsonify({'error':"You do not have rights to perform this action"}), 403
 
-    except:
-        return "Can not delete", 400
+    except Exception as e:
+        print(e)
+        return jsonify({'message': 'Can not delete'}), 500
 
 
 # server function for review creation 
@@ -346,11 +347,11 @@ def createReview():
         review= Review(0, ObjectId(user['_id']), ObjectId(content['serviceId']), content["rating"], content['comment'], None)
         newId = reviewsConnection.createReview(review, usersConnection, servicesConnection)
         if(newId==None):
-            return  jsonify({'message':"Review already exists "}), 404
+            return  jsonify({'error':"Review already exists "}), 404
         else:
             return jsonify({'message':"Review created"}), 200
     except:
-        return jsonify({'message':"It is not possible to create a new review"}), 404
+        return jsonify({'error':"It is not possible to create a new review"}), 404
     
 
 # server function for updating review data
@@ -585,6 +586,52 @@ def getListOfAllServiceTimeSlots(serviceId):
     except Exception as e:
         print(e)
         return jsonify({'message': 'Error fetching time slots'}), 500
+
+
+# get list of all bookings for service 
+@app.route('/getServiceBookings/<serviceId>', methods=['GET'])
+def getServiceBookings(serviceId):
+    try:
+        bookings = bookingsConnection.getBookingsByServiceId(ObjectId(serviceId))
+        bookings_list = []
+        for booking in bookings:
+            bookings_dict={
+                'id': str(booking.id),
+                'userFirstName': str(usersConnection.getUserById(ObjectId(booking.userId))['firstName']),
+                'userLastName': str(usersConnection.getUserById(ObjectId(booking.userId))['lastName']),
+                'slotStartTime': str(timeSlotsConnection.getTimeSlotById(ObjectId(booking.slotId))['start_time']),
+                'slotEndTime': str(timeSlotsConnection.getTimeSlotById(ObjectId(booking.slotId))['end_time']),
+                'booking_date': str(booking.booking_date)
+            }
+            bookings_list.append(bookings_dict)
+        return jsonify({'bookings': bookings_list}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': str(e)}), 500
+    
+# get list of all bookings for user
+@app.route('/getUserBookings/<userId>', methods=['GET'])
+def getUserBookings(userId):
+    try:
+        bookings = bookingsConnection.getBookingsByUserId(ObjectId(userId))
+        bookings_list = []
+        for booking in bookings:
+            bookings_dict={
+                'id': str(booking.id),
+                'serviceId': (servicesConnection.getServiceById(ObjectId(booking.serviceId))['id']),
+                'serviceTitle': str(servicesConnection.getServiceById(ObjectId(booking.serviceId))['title']),
+                'serviceDescription': str(servicesConnection.getServiceById(ObjectId(booking.serviceId))['description']),
+                'serviceLocation': str(servicesConnection.getServiceById(ObjectId(booking.serviceId))['location']),
+                'slotStartTime': str(timeSlotsConnection.getTimeSlotById(ObjectId(booking.slotId))['start_time']),
+                'slotEndTime': str(timeSlotsConnection.getTimeSlotById(ObjectId(booking.slotId))['end_time']),
+                'booking_date': str(booking.booking_date)
+            }
+            bookings_list.append(bookings_dict)
+        return jsonify({'bookings': bookings_list}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': str(e)}), 500
+
 
 
 if __name__ == '__main__':

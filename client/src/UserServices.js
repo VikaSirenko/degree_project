@@ -54,6 +54,10 @@ const UserServices = () => {
     navigate(`/service/${serviceId}`);
   };
 
+  const handleViewAvailability = (serviceId) => {
+    navigate(`/service-bookings/${serviceId}`);
+  };
+
   const handleDeleteService = async (serviceId) => {
     const token = localStorage.getItem('token'); 
     try {
@@ -76,9 +80,7 @@ const UserServices = () => {
     }
   };
 
-  const handleViewAvailability = (serviceId) => {
-    
-  };
+ 
 
   if (isLoading) {
     return <div>Loading...</div>;

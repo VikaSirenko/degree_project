@@ -14,6 +14,8 @@ import EditProfile from './EditProfile';
 import UserServices from './UserServices';
 import EditService from './EditService';
 import AboutPage from './AboutPage';
+import ServiceBookings from './ServiceBookings';
+import UserBookings from './UserBookings';
 
 
 function App() {
@@ -34,6 +36,8 @@ function App() {
         <Route path='/user-services' element={<UserServices/>} />
         <Route path='/edit-service/:serviceId' element={<EditService/>} />
         <Route path='/about-page' element={<AboutPage/>} />
+        <Route path='/service-bookings/:serviceId' element={<ServiceBookings/>} />
+        <Route path='/user-bookings/:userId' element={<UserBookings/>} />
       </Routes>
     </BrowserRouter>
   );
