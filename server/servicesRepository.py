@@ -1,6 +1,6 @@
 from service import *
-#from bdConnection import *
 from bson.objectid import ObjectId
+from bson.regex import Regex
 
 
 class ServicesRepository:
@@ -134,6 +134,28 @@ class ServicesRepository:
         categoryId = category['_id']
         services = self.coll.find({"categoryId": ObjectId(categoryId)})
         return list(services)
+    
+    #search for services by title 
+    def getSearchedServicesByTitle(self, title):
+        regex_query = Regex(f".*{title}.*", "i")
+        results = self.coll.find({"title": regex_query})
+        services = list(results)
+        list_services = []
+        for service in services:
+            service_dict = {
+                "id": str(service["_id"]),  
+                "title": service["title"],
+                "description": service["description"],
+                "location": service["location"],
+                "categoryId": str(service["categoryId"]),  
+                "countryId": str(service["countryId"]),  
+                "userId": str(service["userId"])  
+            }
+            list_services.append(service_dict)
+        return list_services
+
+
+
     
     
 

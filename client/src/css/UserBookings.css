@@ -39,7 +39,7 @@
     margin-bottom: 5px;
   }
   
-  /* Button Styles */
+
   .booking-actions {
     display: flex;
     justify-content: space-between;
@@ -73,7 +73,6 @@
     background-color: #5035ff;
   }
   
-  /* Error message styling */
   .error-message {
     color: #ff6b6b;
     text-align: center;
@@ -85,4 +84,17 @@
     text-align: center;
     margin-top: 20px;
   }
+
+
+  .past-booking {
+      background-color: #ccc; 
+      color: #666;
+  }
+
+  .booking-card:hover {
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
+  }
+
+
+
   

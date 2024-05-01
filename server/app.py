@@ -632,6 +632,17 @@ def getUserBookings(userId):
         print(e)
         return jsonify({'error': str(e)}), 500
 
+# server function for getting a dictionary of searched services
+@app.route('/getSearchedServices', methods=['POST'])
+def getSearchedServices():
+    try:
+        content = request.json
+        print(content['title'])
+        services = servicesConnection.getSearchedServicesByTitle(content['title'])
+        return jsonify({'services': services}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Error fetching services'}), 500
 
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Footer from './Footer';
 import Header from './Header';
-import './css/UserBookings.css'; 
+import './css/UserBookings.css';
 
 const UserBookings = () => {
     const { userId } = useParams();
@@ -22,14 +22,15 @@ const UserBookings = () => {
                 throw new Error('Failed to fetch bookings');
             }
             const data = await response.json();
-            setBookings(data.bookings);
+            const sortedBookings = data.bookings.sort((a, b) => new Date(a.booking_date) - new Date(b.booking_date));
+            setBookings(sortedBookings);
             setIsLoading(false);
         } catch (err) {
             console.error('Error fetching bookings:', err);
             setError(err.message);
             setIsLoading(false);
         }
-    };
+    }; 
 
     const deleteBooking = async (bookingId) => {
         const token = localStorage.getItem('token');
@@ -67,36 +68,42 @@ const UserBookings = () => {
         navigate(`/service/${serviceId}`);
     };
 
+    const isPastBooking = (date) => {
+        const today = new Date();
+        const bookingDate = new Date(date);
+        return bookingDate < today;
+    };
+
     return (
         <>
-        <Header onNavigate={navigate} />
-        <div className="bookings-container">
-            <h1>My Bookings</h1>
-            {isLoading ? (
-                <p>Loading...</p>
-            ) : error ? (
-                <div className="error-message">{error}</div>
-            ) : bookings.length > 0 ? (
-                <div className="bookings-list">
-                    {bookings.map((booking) => (
-                        <div key={booking.id} className="booking-card">
-                            <h2>{booking.serviceTitle}</h2>
-                            <p className="description">{booking.serviceDescription}</p>
-                            <p className="location">Location: {booking.serviceLocation}</p>
-                            <p className="date">Date: {booking.booking_date}</p>
-                            <p className="time">Time Slot: {booking.slotStartTime} - {booking.slotEndTime}</p>
-                            <div className="booking-actions">
-                                <button onClick={() => viewDetails(booking.serviceId)} className="details-button">View Details</button>
-                                <button onClick={() => deleteBooking(booking.id)} className="delete-button">Delete</button>
+            <Header onNavigate={navigate} />
+            <div className="bookings-container">
+                <h1>My Bookings</h1>
+                {isLoading ? (
+                    <p>Loading...</p>
+                ) : error ? (
+                    <div className="error-message">{error}</div>
+                ) : bookings.length > 0 ? (
+                    <div className="bookings-list">
+                        {bookings.map((booking) => (
+                            <div key={booking.id} className={`booking-card ${isPastBooking(booking.booking_date) ? 'past-booking' : ''}`}>
+                                <h2>{booking.serviceTitle}</h2>
+                                <p className="description">{booking.serviceDescription}</p>
+                                <p className="location">Location: {booking.serviceLocation}</p>
+                                <p className="date">Date: {booking.booking_date}</p>
+                                <p className="time">Time Slot: {booking.slotStartTime} - {booking.slotEndTime}</p>
+                                <div className="booking-actions">
+                                    <button onClick={() => viewDetails(booking.serviceId)} className="details-button">View Details</button>
+                                    <button onClick={() => deleteBooking(booking.id)} className="delete-button">Delete</button>
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
-            ) : (
-                <p className="no-bookings">No bookings available.</p>
-            )}
-        </div>
-        <Footer onNavigate={navigate} />
+                        ))}
+                    </div>
+                ) : (
+                    <p className="no-bookings">No bookings available.</p>
+                )}
+            </div>
+            <Footer onNavigate={navigate} />
         </>
     );
 };
