@@ -430,10 +430,23 @@ def getCategories():
 def getServices():
     try:
         services = servicesConnection.getListOfServices()
-        return jsonify({'services': services}), 200
+        list_services = []
+        for service in services:
+            service_dict = {
+                "id": str(service["id"]),  
+                "title": service["title"],
+                "description": service["description"],
+                "location": service["location"],
+                "categoryName": str(categoriesConnection.getCategoryById(service["categoryId"])["categoryName"]),  
+                "countryName":str(countriesConnection.getCountryById(service["countryId"])["countryName"]),  
+                "userId": str(service["userId"])  
+            }
+            list_services.append(service_dict)
+        return jsonify({'services': list_services}), 200
     except Exception as e:
         print(e)
         return jsonify({'message': 'Error fetching services'}), 500
+
 
 # server function for getting service data by id
 @app.route('/getService/<serviceId>', methods=['GET'])
@@ -561,8 +574,20 @@ def getUserServices():
         if not user:
             return jsonify({'message': 'User not found'}), 404
         
-        services = servicesConnection.getServicesByUserId(user['_id'])
-        return jsonify({'services': services}), 200
+        services = servicesConnection.getServicesByUserId(ObjectId(user['_id']))
+        list_services = []
+        for service in services:
+            service_dict = {
+                "id": str(service["_id"]),  
+                "title": service["title"],
+                "description": service["description"],
+                "location": service["location"],
+                "categoryId": str(service["categoryId"]),  
+                "countryId": str(service["countryId"]),  
+                "userId": str(service["userId"])  
+            }
+            list_services.append(service_dict)
+        return jsonify({'services': list_services}), 200
 
     except Exception as e:
         print(e)  
@@ -637,12 +662,60 @@ def getUserBookings(userId):
 def getSearchedServices():
     try:
         content = request.json
-        print(content['title'])
         services = servicesConnection.getSearchedServicesByTitle(content['title'])
-        return jsonify({'services': services}), 200
+        list_services = []
+        for service in services:
+            service_dict = {
+                "id": str(service["_id"]),  
+                "title": service["title"],
+                "description": service["description"],
+                "location": service["location"],
+                "categoryName": str(categoriesConnection.getCategoryById(service["categoryId"])["categoryName"]),  
+                "countryName":str(countriesConnection.getCountryById(service["countryId"])["countryName"]),  
+                "userId": str(service["userId"])  
+            }
+            list_services.append(service_dict)
+        return jsonify({'services': list_services}), 200
     except Exception as e:
         print(e)
         return jsonify({'error': 'Error fetching services'}), 500
+    
+
+# server function for checking services availability for choosen date 
+@app.route('/checkServiceAvailability', methods=['POST'])
+def checkServiceAvailability():
+    try:
+        data = request.json
+        filtred_services = data.get('filtred_services', [])
+        target_date = data.get('date', '')
+
+        if not filtred_services or not target_date:
+            return jsonify({'error': 'Missing required fields: services or date'}), 400
+
+        available_services = []
+        for service in filtred_services:
+            timeSlots = timeSlotsConnection.getListOfServicesTimeslots(service["id"])
+            timeSlots_list = []
+
+            for timeSlot in timeSlots:
+                timeSlots_dict = {
+                    "id": str(timeSlot.slotId),
+                    "serviceId": str(timeSlot.serviceId),
+                    "start_time": str(timeSlot.start_time),
+                    "end_time": str(timeSlot.end_time)
+                }
+                timeSlots_list.append(timeSlots_dict)
+
+            list_timeSlotsId = bookingsConnection.findBookingTimeSlotsByDate(target_date)
+            available_timeSlots = [slot for slot in timeSlots_list if slot["id"] not in list_timeSlotsId]
+            if len(available_timeSlots) > 0:
+                available_services.append(service)
+
+        return jsonify({'availableServices': available_services}), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'An error occurred while checking availability'}), 500
 
 
 if __name__ == '__main__':
