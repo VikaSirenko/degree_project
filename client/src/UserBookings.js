@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Footer from './Footer';
 import Header from './Header';
 import './css/UserBookings.css';
+import { useLanguage } from './LanguageContext';
 
 const UserBookings = () => {
     const { userId } = useParams();
@@ -10,6 +11,7 @@ const UserBookings = () => {
     const [bookings, setBookings] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { translations } = useLanguage();
 
     useEffect(() => {
         fetchUserBookings();
@@ -19,14 +21,14 @@ const UserBookings = () => {
         try {
             const response = await fetch(`http://localhost:8080/getUserBookings/${userId}`);
             if (!response.ok) {
-                throw new Error('Failed to fetch bookings');
+                throw new Error(translations.userBookings.failFetchBookingsError);
             }
             const data = await response.json();
             const sortedBookings = data.bookings.sort((a, b) => new Date(a.booking_date) - new Date(b.booking_date));
             setBookings(sortedBookings);
             setIsLoading(false);
         } catch (err) {
-            console.error('Error fetching bookings:', err);
+            console.error(translations.userBookings.failFetchBookingsError, err);
             setError(err.message);
             setIsLoading(false);
         }
@@ -35,11 +37,11 @@ const UserBookings = () => {
     const deleteBooking = async (bookingId) => {
         const token = localStorage.getItem('token');
         if (!token) {
-            setError('You must be logged in to delete a booking.');
+            setError(translations.userBookings.logInError);
             return;
         }
 
-        if (window.confirm("Are you sure you want to delete this booking?")) {
+        if (window.confirm(translations.userBookings.deleteConfirmation)) {
             try {
                 const response = await fetch(`http://localhost:8080/deleteBooking`, {
                     method: 'DELETE',
@@ -52,14 +54,14 @@ const UserBookings = () => {
 
                 if (!response.ok) {
                     const errorData = await response.json();
-                    throw new Error(errorData.message || 'Failed to delete booking');
+                    throw new Error(errorData.message || translations.userBookings.deleteFailing);
                 }
 
                 setBookings(bookings.filter(booking => booking.id !== bookingId));
-                alert('Booking deleted successfully.');
+                alert(translations.userBookings.successfulAlert);
             } catch (error) {
-                console.error('Error deleting booking:', error);
-                setError(error.message || 'An error occurred while deleting the booking.');
+                console.error(translations.userBookings.anyDeletingError, error);
+                setError(error.message || translations.userBookings.anyDeletingError);
             }
         }
     };
@@ -78,9 +80,9 @@ const UserBookings = () => {
         <>
             <Header onNavigate={navigate} />
             <div className="bookings-container">
-                <h1>My Bookings</h1>
+                <h1>{translations.userBookings.title}</h1>
                 {isLoading ? (
-                    <p>Loading...</p>
+                    <p>{translations.userBookings.loading}</p>
                 ) : error ? (
                     <div className="error-message">{error}</div>
                 ) : bookings.length > 0 ? (
@@ -89,18 +91,18 @@ const UserBookings = () => {
                             <div key={booking.id} className={`booking-card ${isPastBooking(booking.booking_date) ? 'past-booking' : ''}`}>
                                 <h2>{booking.serviceTitle}</h2>
                                 <p className="description">{booking.serviceDescription}</p>
-                                <p className="location">Location: {booking.serviceLocation}</p>
-                                <p className="date">Date: {booking.booking_date}</p>
-                                <p className="time">Time Slot: {booking.slotStartTime} - {booking.slotEndTime}</p>
+                                <p className="location">{translations.serviceDatails.locationLabel} {booking.serviceLocation}</p>
+                                <p className="date">{translations.serviceBookings.dateLabel} {booking.booking_date}</p>
+                                <p className="time">{translations.serviceBookings.timeSlotLabel} {booking.slotStartTime} - {booking.slotEndTime}</p>
                                 <div className="booking-actions">
-                                    <button onClick={() => viewDetails(booking.serviceId)} className="details-button">View Details</button>
-                                    <button onClick={() => deleteBooking(booking.id)} className="delete-button">Delete</button>
+                                    <button onClick={() => viewDetails(booking.serviceId)} className="details-button">{translations.userBookings.viewDetailsButton}</button>
+                                    <button onClick={() => deleteBooking(booking.id)} className="delete-button">{translations.userBookings.deleteButton}</button>
                                 </div>
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <p className="no-bookings">No bookings available.</p>
+                    <p className="no-bookings">{translations.userBookings.noBookingsLabel}</p>
                 )}
             </div>
             <Footer onNavigate={navigate} />

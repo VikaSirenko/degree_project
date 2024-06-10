@@ -5,12 +5,14 @@ import UserServicesGrid from './UserServicesGrid';
 import "./css/ServicesList.css"; 
 import "./css/UserServices.css"; 
 import Footer from './Footer';
+import { useLanguage } from './LanguageContext';
 
 const UserServices = () => {
   const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { translations } = useLanguage();
 
   useEffect(() => {
     fetchUserServices();
@@ -33,7 +35,7 @@ const UserServices = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch user services');
+        throw new Error(translations.userSrervices.failedFetchServices);
       }
 
       const data = await response.json();
@@ -60,30 +62,32 @@ const UserServices = () => {
 
   const handleDeleteService = async (serviceId) => {
     const token = localStorage.getItem('token'); 
-    try {
-      const response = await fetch(`http://localhost:8080/deleteService/${serviceId}`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': token,
-        }
-      });
+    if (window.confirm(translations.userSrervices.deleteConfirmation)) {
+      try {
+          const response = await fetch(`http://localhost:8080/deleteService/${serviceId}`, {
+              method: 'DELETE',
+              headers: {
+                  'Authorization': token,
+              }
+          });
 
-      if (!response.ok) {
-        throw new Error('Failed to delete service');
+          if (!response.ok) {
+              throw new Error(translations.userSrervices.failedAlert);
+          }
+
+          setServices(services.filter(service => service.id !== serviceId)); 
+          alert(translations.userSrervices.successfulAlert);
+      } catch (err) {
+          console.error(translations.userSrervices.failedAlert, err);
+          setError(err.message);
       }
-
-      setServices(services.filter(service => service.id !== serviceId)); 
-      alert('Service deleted successfully');
-    } catch (err) {
-      console.error('Error deleting service:', err);
-      setError(err.message);
-    }
-  };
+  }
+};
 
  
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>{translations.userSrervices.loading}</div>;
   }
 
   if (error) {
@@ -99,7 +103,7 @@ const UserServices = () => {
     <>
       <Header onNavigate={navigate} />
       <div className="user-services-container">
-        <h1>My Services</h1>
+        <h1>{translations.userSrervices.title}</h1>
         {services.length > 0 ? (
           <UserServicesGrid 
             services={services}
@@ -109,7 +113,7 @@ const UserServices = () => {
             onViewAvailability={handleViewAvailability}
           />
         ) : (
-          <p>No services found.</p>
+          <p>{translations.userSrervices.noServicesLabel}</p>
         )}
       </div>
       <Footer onNavigate={navigate} />

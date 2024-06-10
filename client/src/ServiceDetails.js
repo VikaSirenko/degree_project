@@ -7,20 +7,22 @@ import beauty from './images/beauty.webp'
 import AddReview from './AddReview';
 import ReviewsSection from './ReviewsSection';
 import Footer from './Footer';
+import { useLanguage } from './LanguageContext';
 
 const ServiceDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [service, setService] = useState(null);
   const [error, setError] = useState('');
+  const { translations } = useLanguage();
 
   useEffect(() => {
     const fetchServiceDetail = async () => {
       try {
         const response = await fetch(`http://localhost:8080/getService/${id}`); 
         if (!response.ok) {
-          throw new Error(`Service not found: ${response.statusText}`);
-        }
+          throw new Error(`${translations.serviceDatails.serviceError}  ${response.statusText}`);
+        } 
         const data = await response.json();
         setService(data);
       } catch (err) {
@@ -36,7 +38,7 @@ const ServiceDetails = () => {
   }
 
   if (!service) {
-    return <div>Loading...</div>;
+    return <div>{translations.userBookings.loading}</div>;
   }
 
   const handleReserveClick = () => {
@@ -50,11 +52,11 @@ const ServiceDetails = () => {
         <img src={beauty} alt="Service" className="service-image" />
         <div className="service-info">
           <h1>{service.title}</h1>
-          <p><strong>Description:</strong> {service.description}</p>
-          <p><strong>Location:</strong> {service.location}</p>
-          <p><strong>Category:</strong> {service.categoryName}</p>
-          <p><strong>Country:</strong> {service.countryName}</p>
-          <button onClick={handleReserveClick} className="reserve-button">Reserve</button>
+          <p><strong>{translations.serviceDatails.desctiptionLabel}</strong> {service.description}</p>
+          <p><strong>{translations.serviceDatails.locationLabel}</strong> {service.location}</p>
+          <p><strong>{translations.serviceDatails.categoryLabel}</strong> {service.categoryName}</p>
+          <p><strong>{translations.serviceDatails.countryLabel}</strong> {service.countryName}</p>
+          <button onClick={handleReserveClick} className="reserve-button">{translations.serviceDatails.reserveButton}</button>
           <AddReview serviceId={id} />
         </div>
         <ReviewsSection serviceId={id} /> 

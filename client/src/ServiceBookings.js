@@ -5,6 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 import Header from './Header';
 import Footer from './Footer';
 import './css/ServiceBookings.css';
+import { useLanguage } from './LanguageContext';
 
 const ServiceBookings = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const ServiceBookings = () => {
   const [displayBookings, setDisplayBookings] = useState([]);
   const [error, setError] = useState('');
   const token = localStorage.getItem('token');
+  const { translations } = useLanguage();
 
   useEffect(() => {
     fetchBookings();
@@ -22,14 +24,14 @@ const ServiceBookings = () => {
   const fetchBookings = async () => {
     try {
       const response = await fetch(`http://localhost:8080/getServiceBookings/${serviceId}`);
-      if (!response.ok) throw new Error('Failed to fetch bookings');
+      if (!response.ok) throw new Error(translations.serviceBookings.errorFetchingBookings);
       const data = await response.json();
       setBookings(data.bookings.map(booking => ({
         ...booking,
         booking_date: new Date(booking.booking_date) 
       })));
     } catch (err) {
-      console.error('Error fetching bookings:', err);
+      console.error(translations.serviceBookings.errorFetchingBookings, err);
       setError(err.message);
     }
   };
@@ -50,7 +52,7 @@ return (
     <>
       <Header onNavigate={navigate} />
       <div className="container">
-        <h1>Service Bookings Calendar</h1>
+        <h1>{translations.serviceBookings.title}</h1>
         {error && <div className="error">{error}</div>}
         <div className="calendar-container">
           <Calendar
@@ -70,18 +72,18 @@ return (
             {displayBookings.map((booking, index) => (
               <li key={index} className="booking-item">
                 <div className="booking-detail">
-                  <strong>Date:</strong> {new Date(booking.booking_date).toLocaleDateString()}
+                  <strong>{translations.serviceBookings.dateLabel}</strong> {new Date(booking.booking_date).toLocaleDateString()}
                 </div>
                 <div className="booking-detail">
-                  <strong>Customer:</strong> {booking.userFirstName} {booking.userLastName}
+                  <strong>{translations.serviceBookings.customerLabel}</strong> {booking.userFirstName} {booking.userLastName}
                 </div>
                 <div className="booking-detail">
-                  <strong>Time Slot:</strong> {booking.slotStartTime} - {booking.slotEndTime}
+                  <strong>{translations.serviceBookings.timeSlotLabel}</strong> {booking.slotStartTime} - {booking.slotEndTime}
                 </div>
               </li>
             ))}
           </ul>
-        ) : <p className="no-bookings">No bookings available for this date.</p>}
+        ) : <p className="no-bookings">{translations.serviceBookings.noBookingsLabel}</p>}
       </div>
       <Footer onNavigate={navigate} />
     </>

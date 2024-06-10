@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './css/EditReview.css'; 
 import Header from './Header';
 import Footer from './Footer';
+import { useLanguage } from './LanguageContext';
 
 const EditReview = () => {
   const { reviewId, serviceId } = useParams();
@@ -11,10 +12,11 @@ const EditReview = () => {
   const [comment, setComment] = useState('');
   const [error, setError] = useState('');
   const token = localStorage.getItem('token');
+  const { translations } = useLanguage();
 
   useEffect(() => {
     if (!token) {
-      setError('You must be logged in to edit a review.');
+      setError(translations.editReview.logInError);
       return;
     }
 
@@ -27,16 +29,16 @@ const EditReview = () => {
           });
           if (!response.ok) {
             if (response.status === 403) {
-              throw new Error('You do not have permission to perform this action.');
+              throw new Error(translations.editReview.permissionError);
             }
             const errorData = await response.json();
-            throw new Error(errorData.message || 'Failed to fetch review data');
+            throw new Error(errorData.message || translations.editReview.fetchError);
           }
           const data = await response.json();
           setRating(data.rating);
           setComment(data.comment);
         } catch (err) {
-            console.error('Error fetching review data:', err);
+            console.error(translations.editReview.fetchError, err);
             setError(err.message);
           
             setTimeout(() => {
@@ -51,7 +53,7 @@ const EditReview = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!token) {
-      setError('You must be logged in to update a review.');
+      setError(translations.editReview.updateError);
       return;
     }
 
@@ -67,13 +69,13 @@ const EditReview = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to update review');
+        throw new Error(errorData.message || translations.editReview.failUpdate);
       }
-      alert('Review updated successfully');
+      alert(translations.editReview.successfulAlert);
       navigate(-1);
     } catch (err) {
-      console.error('Error updating review:', err);
-      setError(err.message || 'An error occurred');
+      console.error(translations.editReview.failUpdate, err);
+      setError(err.message || translations.editReview.failUpdate);
     }
   };
 
@@ -81,11 +83,11 @@ const EditReview = () => {
     <>
     <Header onNavigate={navigate} />
     <div className="edit-review-form">
-      <h2>Edit Review</h2>
+      <h2>{translations.editReview.editReview}</h2>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <label>
-          Rating:
+          {translations.editReview.rating}
           <input
             type="number"
             value={rating}
@@ -95,13 +97,13 @@ const EditReview = () => {
           />
         </label>
         <label>
-          Comment:
+          {translations.editReview.comment}
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           />
         </label>
-        <button type="submit" disabled={!token}>Update Review</button>
+        <button type="submit" disabled={!token}>{translations.editReview.updateButton}</button>
       </form>
     </div>
     <Footer onNavigate={navigate} />

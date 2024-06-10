@@ -5,9 +5,11 @@ import CategoriesForm from './DisplayingCategories';
 import Header from './Header'; 
 import './css/CreateService.css';
 import Footer from './Footer';
+import { useLanguage } from './LanguageContext';
 
 const CreateService = () => {
   const navigate = useNavigate();
+  const { translations } = useLanguage();
   const [serviceData, setServiceData] = useState({
     title: '',
     description: '',
@@ -34,13 +36,13 @@ const CreateService = () => {
     const { title, description, location, categoryName, countryName } = serviceData;
 
     if (!title || !description || !location ) {
-      setErrorMessage('Please fill out all fields.');
+      setErrorMessage(translations.createService.fillInError);
       return;
     }
 
     const token = localStorage.getItem('token');
     if (!token) {
-      setErrorMessage('You must be logged in to create a service.');
+      setErrorMessage(translations.createService.logInError);
       return;
     }
 
@@ -62,15 +64,15 @@ const CreateService = () => {
 
       const data = await response.json();
       if (response.ok) {
-        alert('Service created successfully');
+        alert(translations.createService.successfulAlert);
         navigate(`/create-time-slot/${data.serviceId}`); 
       } else {
         const errorData = await response.json();
-        setErrorMessage(errorData.message || 'Failed to create service');
+        setErrorMessage(errorData.message || translations.createService.failedAlert);
       }
     } catch (error) {
-      console.error('Error creating service:', error);
-      setErrorMessage('An error occurred while creating the service.');
+      console.error(translations.createService.anyCreatingArror, error);
+      setErrorMessage(translations.createService.anyCreatingArror);
     }
   };
 
@@ -78,15 +80,15 @@ const CreateService = () => {
     <div>
       <Header onNavigate={navigate} />
       <div className='create-service-form'>
-        <h2>Create Service</h2>
+        <h2>{translations.createService.title}</h2>
         {errorMessage && <p className="error">{errorMessage}</p>}
         <form onSubmit={handleSubmit}>
-          <input type="text" name="title" placeholder="Title" value={serviceData.title} onChange={handleChange} />
-          <input type="text" name="description" placeholder="Description" value={serviceData.description} onChange={handleChange} />
-          <input type="text" name="location" placeholder="Location" value={serviceData.location} onChange={handleChange} />
+          <input type="text" name="title" placeholder={translations.createService.titleService} value={serviceData.title} onChange={handleChange} />
+          <input type="text" name="description" placeholder={translations.createService.description} value={serviceData.description} onChange={handleChange} />
+          <input type="text" name="location" placeholder={translations.createService.location} value={serviceData.location} onChange={handleChange} />
           <CategoriesForm onSelect={handleCategorySelect} />
           <CountriesForm onSelect={handleCountrySelect} />
-          <button type="submit">Create Service</button>
+          <button type="submit">{translations.createService.createButton}</button>
         </form>
       </div>
       <Footer onNavigate={navigate} />

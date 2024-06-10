@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import './css/EditProfile.css'; 
 import Header from './Header';
 import Footer from './Footer';
+import { useLanguage } from './LanguageContext';
 
 const EditProfile = () => {
   const navigate = useNavigate();
+  const { translations } = useLanguage();
   const [userData, setUserData] = useState({
     firstName: '',
     lastName: '',
@@ -25,13 +27,13 @@ const EditProfile = () => {
           }
         });
         if (!response.ok) {
-          throw new Error('Failed to fetch user data');
+          throw new Error(translations.EditProfile.errorFetching);
         }
         const data = await response.json();
         setUserData({ ...data, password: '', confirmPassword: '' }); 
       } catch (err) {
         setError(err.message);
-        console.error('Error fetching user data:', err);
+        console.error(translations.EditProfile.errorFetching, err);
       }
     };
 
@@ -49,7 +51,7 @@ const EditProfile = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (userData.password !== userData.confirmPassword) {
-      setError("Passwords do not match.");
+      setError(translations.EditProfile.errorPassword);
       return;
     }
 
@@ -70,13 +72,13 @@ const EditProfile = () => {
       });
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to update user data');
+        throw new Error(errorData.message || translations.EditProfile.errorUpdate);
       }
-      alert('Profile updated successfully');
+      alert(translations.EditProfile.successfulAlert);
       navigate('/'); 
     } catch (err) {
       setError(err.message);
-      console.error('Error updating user data:', err);
+      console.error(translations.EditProfile.errorUpdate, err);
     }
   };
 
@@ -84,11 +86,11 @@ const EditProfile = () => {
     <>
         <Header onNavigate={navigate} />
         <div className="edit-profile-container">
-        <h1>Edit Profile</h1>
+        <h1>{translations.EditProfile.editProfile}</h1>
         {error && <div className="error">{error}</div>}
         <form onSubmit={handleSubmit}>
             <label>
-            First Name:
+            {translations.EditProfile.firstName}
             <input
                 type="text"
                 name="firstName"
@@ -97,7 +99,7 @@ const EditProfile = () => {
             />
             </label>
             <label>
-            Last Name:
+            {translations.EditProfile.lastName}
             <input
                 type="text"
                 name="lastName"
@@ -106,7 +108,7 @@ const EditProfile = () => {
             />
             </label>
             <label>
-            Email:
+            {translations.EditProfile.email}
             <input
                 type="email"
                 name="email"
@@ -115,26 +117,26 @@ const EditProfile = () => {
             />
             </label>
             <label>
-            Password (leave blank to keep the same):
+            {translations.EditProfile.password}
             <input
                 type="password"
                 name="password"
                 value={userData.password}
                 onChange={handleChange}
-                placeholder="Enter new password"
+                placeholder={translations.EditProfile.enterPassword}
             />
             </label>
             <label>
-            Confirm New Password:
+            {translations.EditProfile.confirmPassword}
             <input
                 type="password"
                 name="confirmPassword"
                 value={userData.confirmPassword}
                 onChange={handleChange}
-                placeholder="Confirm new password"
+                placeholder={translations.EditProfile.enterConfirmPassword}
             />
             </label>
-            <button type="submit">Update Profile</button>
+            <button type="submit">{translations.EditProfile.updateButton}</button>
         </form>
         </div>
         <Footer onNavigate={navigate} />

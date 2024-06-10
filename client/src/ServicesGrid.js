@@ -2,8 +2,10 @@ import React from 'react';
 import './css/ServicesGrid.css';
 import beauty from "./images/beauty.webp"
 import { Link } from 'react-router-dom';
+import { useLanguage } from './LanguageContext';
 
 const ServiceCard = ({ service }) => {
+  const { translations } = useLanguage();
   return (
     <div className="service-card">
       <div className="service-icon">
@@ -11,7 +13,7 @@ const ServiceCard = ({ service }) => {
       </div>
       <h3 className="service-title">{service.title}</h3>
       <Link to={`/service/${service.id}`} className="service-button">
-        Learn More
+        {translations.servicesGrid.learnMoreButton}
       </Link>
     </div>
   );

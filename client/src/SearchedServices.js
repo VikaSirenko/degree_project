@@ -9,6 +9,7 @@ import CategoriesForm from './DisplayingCategories';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import "./css/FiltersComponent.css"
+import { useLanguage } from './LanguageContext';
 
 const ServicesPerPage = 8;
 
@@ -25,7 +26,7 @@ const SearchedServices = () => {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedCountry, setSelectedCountry] = useState('');
     const [selectedDate, setSelectedDate] = useState(new Date());
-
+    const { translations } = useLanguage();
     useEffect(() => {
         if (title) {
             fetchSearchedServices(title);
@@ -48,7 +49,7 @@ const SearchedServices = () => {
                 })
             });
             if (!response.ok) {
-                throw new Error(`Failed to fetch services: ${response.status}`);
+                throw new Error(`${translations.serchedServices.failedAlert} ${response.status}`);
             }
             const data = await response.json();
             setAllServices(data.services);
@@ -86,7 +87,7 @@ const SearchedServices = () => {
                     })
                 });
                 if (!response.ok) {
-                    throw new Error(`Failed to check service availability: ${response.status}`);
+                    throw new Error(`${translations.serchedServices.failedCheckAvailability}  ${response.status}`);
                 }
                 const data = await response.json();
                 setFilteredServices(data.availableServices);
@@ -116,17 +117,17 @@ const SearchedServices = () => {
             <Header onNavigate={navigate} />
             <div className="filters-container">
                 <div className="category-filter">
-                    <h3>Select Category</h3>
+                    <h3>{translations.serchedServices.selectCategoryLabel}</h3>
                     <CategoriesForm onSelect={setSelectedCategory} />
                 </div>
                 <div className="country-filter">
-                    <h3>Select Country</h3>
+                    <h3>{translations.serchedServices.selectCountryLabel}</h3>
                     <CountriesForm onSelect={setSelectedCountry} />
                 </div>
             </div>
             <div className="calendar-container">
                 <Calendar value={selectedDate} onChange={setSelectedDate} />
-                <button onClick={checkAvailability} className="check-availability-btn">Check Availability</button>
+                <button onClick={checkAvailability} className="check-availability-btn">{translations.serchedServices.checkAvailabilityButton}</button>
             </div>
             {error && <div className="error-message">{error}</div>}
             {filteredServices.length > 0 ? (
@@ -134,17 +135,17 @@ const SearchedServices = () => {
                     <ServicesGrid services={currentServices} />
                     <div className="pagination">
                         <button onClick={goToPrevPage} disabled={currentPage === 1}>
-                            Prev
+                            {translations.serchedServices.prev}
                         </button>
                         <span>{currentPage}</span>
                         <button onClick={goToNextPage} disabled={currentPage === totalPages}>
-                            Next
+                            {translations.serchedServices.next}
                         </button>
                     </div>
                 </>
             ) : (
                 <div className="no-services-message">
-                    No services available matching the criteria.
+                    {translations.serchedServices.noServicesLabel}
                 </div>
             )}
             <Footer onNavigate={navigate} />

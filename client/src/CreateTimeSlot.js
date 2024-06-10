@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import './css/CreateTimeSlot.css';
 import moment from 'moment';
 import Footer from './Footer';
+import { useLanguage } from './LanguageContext';
 
 const CreateTimeSlot = () => {
   const navigate = useNavigate();
@@ -14,18 +15,19 @@ const CreateTimeSlot = () => {
   const [endTime, setEndTime] = useState(new Date());
   const [timeSlots, setTimeSlots] = useState([]);
   const [error, setError] = useState('');
+  const { translations } = useLanguage();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
 
     if (!token) {
-      setError('You must be logged in to create a time slot.');
+      setError(translations.createTimeSlot.logInError);
       return;
     }
 
     if (endTime <= startTime) {
-      setError('End time must be later than start time.');
+      setError(translations.createTimeSlot.timeError);
       return; 
     }
 
@@ -52,14 +54,14 @@ const CreateTimeSlot = () => {
         setStartTime(new Date());
         setEndTime(new Date());
         setError('');
-        alert('Time slot created successfully');
+        alert(translations.createTimeSlot.successfulAlert);
       } else {
         const errorData = await response.json();
-        setError(errorData.message || 'Failed to create time slot');
+        setError(errorData.message || translations.createTimeSlot.failedAlert);
       }
     } catch (error) {
-      console.error('Error creating time slot:', error);
-      setError('An error occurred while creating the time slot.');
+      console.error(translations.createTimeSlot.anyAddingError, error);
+      setError(translations.createTimeSlot.anyAddingError);
     }
   };
 
@@ -71,12 +73,12 @@ const CreateTimeSlot = () => {
     <>
       <Header onNavigate={navigate} />
       <div className="create-time-slot-container">
-        <h2>Create Time Slot for Service</h2>
+        <h2>{translations.createTimeSlot.title}</h2>
         {error && <div className="error">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-section">
             <label>
-              Start Time:
+              {translations.createTimeSlot.startLabel}
               <DatePicker
                 selected={startTime}
                 onChange={setStartTime}
@@ -88,7 +90,7 @@ const CreateTimeSlot = () => {
               />
             </label>
             <label>
-              End Time:
+              {translations.createTimeSlot.endLable}
               <DatePicker
                 selected={endTime}
                 onChange={setEndTime}
@@ -99,15 +101,15 @@ const CreateTimeSlot = () => {
                 dateFormat="HH:mm"
               />
             </label>
-            <button type="submit">Create Time Slot</button>
-            <button type="button" onClick={handleComplete} className="complete-button">Complete Time Slots</button>
+            <button type="submit">{translations.createTimeSlot.createButton}</button>
+            <button type="button" onClick={handleComplete} className="complete-button">{translations.createTimeSlot.completeButton}</button>
           </div>
         </form>
         <div className="time-slots-list">
-          <h3>Created Time Slots:</h3>
+          <h3>{translations.createTimeSlot.listLable}</h3>
           <ul>
             {timeSlots.map((slot, index) => (
-              <li key={index}>{`Start Time: ${slot.start_time}, End Time: ${slot.end_time}`}</li>
+              <li key={index}>{`${translations.createTimeSlot.startLabel} ${slot.start_time}, ${translations.createTimeSlot.endLabe} ${slot.end_time}`}</li>
             ))}
           </ul>
         </div>

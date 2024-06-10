@@ -5,6 +5,8 @@ import 'react-calendar/dist/Calendar.css';
 import Header from './Header';
 import './css/ReservationPage.css';
 import Footer from './Footer';
+import { useLanguage } from './LanguageContext';
+
 
 const ReservationPage = () => {
   const navigate = useNavigate();
@@ -14,6 +16,7 @@ const ReservationPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [error, setError] = useState('');
   const token = localStorage.getItem('token');
+  const { translations } = useLanguage();
 
   useEffect(() => {
     if (selectedDate) {
@@ -32,12 +35,12 @@ const ReservationPage = () => {
       });
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to fetch time slots');
+        throw new Error(errorData.message || translations.reservationPage.failedTimeAlert);
       }
       const data = await response.json();
       setTimeSlots(data.timeSlots);
     } catch (err) {
-      console.error('Error fetching time slots:', err);
+      console.error(translations.reservationPage.failedTimeAlert, err);
       setError(err.message);
     }
   };
@@ -57,12 +60,12 @@ const ReservationPage = () => {
 
   const handleReservation = async () => {
     if (!selectedSlot) {
-      setError("Please select a time slot before confirming the reservation.");
+      setError(translations.reservationPage.timeError);
       return;
     }
 
     if (!token) {
-      setError('You must be logged in to create a booking.');
+      setError(translations.reservationPage.logInError);
       return;
     }
 
@@ -79,12 +82,12 @@ const ReservationPage = () => {
       });
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to make reservation');
+        throw new Error(errorData.message || translations.reservationPage.failedBookingAlert);
       }
-      alert('Reservation successful!');
+      alert(translations.reservationPage.successfulAlert);
       navigate(`/service/${id}`);
     } catch (err) {
-      console.error('Reservation failed:', err);
+      console.error(translations.reservationPage.failedBookingAlert, err);
       setError(err.message);
     }
   };
@@ -94,7 +97,7 @@ const ReservationPage = () => {
     <>
       <Header onNavigate={navigate} />
       <div className="container">
-        <h1>Reserve Service</h1>
+        <h1>{translations.reservationPage.title}</h1>
         {error && <div className="error">{error}</div>}
         <div className="calendar-container">
           <Calendar
@@ -104,28 +107,28 @@ const ReservationPage = () => {
           />
         </div>
         <div className="time-slots-container">
-          <h2>Available Time:</h2>
+          <h2>{translations.reservationPage.availableLable}</h2>
           {timeSlots.length > 0 ? (
             <ul className="time-slots-list">
               {timeSlots.map(slot => (
                 <li key={slot.id} className={slot.isSelected ? 'selected' : ''}>
-                  Time: {slot.start_time} - {slot.end_time}
+                  {translations.reservationPage.timeLabel} {slot.start_time} - {slot.end_time}
                   <button 
                     onClick={() => handleSlotSelection(slot.id)}
                     className={`time-slot-button ${slot.isSelected ? 'selected-slot' : ''}`}>
-                    Select
+                    {translations.reservationPage.selectButton}
                   </button>
                 </li>
               ))}
             </ul>
           ) : (
-            <p>No time slots available for the selected date.</p>
+            <p> {translations.reservationPage.noTimeMes}</p>
           )}
         </div>
         {selectedSlot && (
           <div className="confirm-reservation-container">
             <button onClick={handleReservation} className="confirm-button">
-              Confirm Reservation
+            {translations.reservationPage.confirmButton}
             </button>
           </div>
         )}

@@ -12,7 +12,8 @@ const CountriesForm = ({ onSelect }) => {
       const response = await fetch('http://localhost:8080/getCountries');
       if (response.ok) {
         const data = await response.json();
-        setCountries(data.countries);
+        const sortedCountries = data.countries.sort((a, b) => a.localeCompare(b));
+        setCountries(sortedCountries);
       } else {
         console.error('Failed to fetch countries');
       }

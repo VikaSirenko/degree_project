@@ -163,26 +163,27 @@ def createService():
         return jsonify({'error': "It is not possible to create a new service", 'error': str(e)}), 500
 
 # server function for deleting service  
-@app.route('/deleteService', methods=['DELETE'])
+@app.route('/deleteService/<serviceId>', methods=['DELETE'])
 @token_required
-def deleteService():
+def deleteService(serviceId):
     try:
         user_data=request.headers.get('authorization')
         data=jwt.decode(user_data, app.config['SECRET_KEY'], algorithms=['HS256'])
         user=usersConnection.getUserByEmail(data['email'])
-        content = request.form
-        service= servicesConnection.getServiceById(content['_id'])
+        service= servicesConnection.getServiceById(serviceId)
+        print(ObjectId(user["_id"]))
+        print(ObjectId(service["userId"]))
         if(ObjectId(user["_id"])==ObjectId(service["userId"])):
-            result=servicesConnection.deleteServiceByID(content['_id'])
+            result=servicesConnection.deleteServiceByID(serviceId)
             if (result==True):
-                reviewsConnection.deleteAllServiceReviews(content['_id'])
-                bookingsConnection.deleteAllBookingsByServiceId(content['_id'])
-                timeSlotsConnection.deleteAllTimeSlotsByServiceId(content['_id'])
-                return "Deleted", 200
+                reviewsConnection.deleteAllServiceReviews(serviceId)
+                bookingsConnection.deleteAllBookingsByServiceId(serviceId)
+                timeSlotsConnection.deleteAllTimeSlotsByServiceId(serviceId)
+                return jsonify({'message':"Deleted"}), 200
             else:
-                return ("Cannot find service to delete"), 404
+                return jsonify({'error':"Cannot find service to delete"}), 404
         else:
-            return("You do not have rights to perform this action"), 403
+            return jsonify({'error':"You do not have rights to perform this action"}), 403
 
     except:
         return "Can not delete", 400
@@ -295,8 +296,9 @@ def createBooking():
         content = request.json
         service= servicesConnection.getServiceById(content['serviceId'])
         timeSlot = timeSlotsConnection.getTimeSlotById(content['slotId'])
-        if(ObjectId(user["_id"])==ObjectId(service["userId"]) and ObjectId(service["id"])==ObjectId(timeSlot["serviceId"]) ):
+        if(ObjectId(service["id"])==ObjectId(timeSlot["serviceId"]) ):
             booking = Booking(0, user["_id"], ObjectId(content["serviceId"]), ObjectId(content['slotId']), content['booking_date'])
+            print("hello")
             newId = bookingsConnection.createBooking(booking, usersConnection, servicesConnection, timeSlotsConnection)
             if(newId==None):
                 return jsonify({"error":"Booking already exists "}), 404

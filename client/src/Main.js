@@ -3,19 +3,20 @@ import Header from './Header';
 import './css/Main.css';
 import Footer from './Footer';
 import React, { useState } from 'react';
-
+import { useLanguage } from './LanguageContext';
 
 const Main = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState('');
+  const { translations } = useLanguage();
 
   const handleSearch = (event) => {
     event.preventDefault();
     setError('');
 
     if (!searchTerm.trim()) {
-      setError("Please enter a search term.");
+      setError(translations.main.searchError);
       return;
     }
 
@@ -31,7 +32,7 @@ const Main = () => {
         <form onSubmit={handleSearch} className="search-form">
           <input
             type="text"
-            placeholder="Search..."
+            placeholder={translations.main.searchLabel}
             className="search-input"
             value={searchTerm}
             onChange={(e) => {
@@ -39,7 +40,7 @@ const Main = () => {
               setError(''); 
             }}
           />
-          <button type="submit" className="search-button">Search</button>
+          <button type="submit" className="search-button">{translations.main.searchButton}</button>
         </form>
         {error && <p className="error">{error}</p>}
       </div>

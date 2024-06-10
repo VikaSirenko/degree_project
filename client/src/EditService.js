@@ -5,6 +5,7 @@ import CategoriesForm from './DisplayingCategories';
 import Header from './Header';
 import './css/EditService.css';
 import Footer from './Footer';
+import { useLanguage } from './LanguageContext';
 
 const EditService = () => {
   const { serviceId } = useParams();
@@ -19,6 +20,7 @@ const EditService = () => {
   const [timeSlots, setTimeSlots] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const { translations } = useLanguage();
 
   useEffect(() => {
     fetchServiceDetails();
@@ -32,7 +34,7 @@ const EditService = () => {
       const response = await fetch(`http://localhost:8080/getService/${encodedServiceId}`, {
         headers: { 'authorization': token}
       });
-      if (!response.ok) throw new Error('Failed to fetch service details');
+      if (!response.ok) throw new Error(translations.editService.fatchError);
       const data = await response.json();
       setServiceData({
         title: data.title,
@@ -42,7 +44,7 @@ const EditService = () => {
         countryName: data.countryName
       });
     } catch (error) {
-      console.error('Error fetching service details:', error);
+      console.error(translations.editService.fetchError, error);
       setErrorMessage(error.message);
     }
   };
@@ -53,11 +55,11 @@ const EditService = () => {
       const response = await fetch(`http://localhost:8080/getListOfAllServicesTimeslots/${serviceId}`, {
         headers: { 'authorization': token }
       });
-      if (!response.ok) throw new Error('Failed to fetch time slots');
+      if (!response.ok) throw new Error(translations.editService.fetchTimeError);
       const data = await response.json();
       setTimeSlots(data.timeSlots);
     } catch (error) {
-      console.error('Error fetching time slots:', error);
+      console.error(translations.editService.fetchTimeError, error);
       setErrorMessage(error.message);
     }
   };
@@ -79,13 +81,13 @@ const EditService = () => {
     const { title, description, location, categoryName, countryName } = serviceData;
 
     if (!title || !description || !location ) {
-      setErrorMessage('Please fill out all fields.');
+      setErrorMessage(translations.editService.fillError);
       return;
     }
 
     const token = localStorage.getItem('token');
     if (!token) {
-      setErrorMessage('You must be logged in to create a service.');
+      setErrorMessage(translations.editService.logInError);
       return;
     }
 
@@ -109,11 +111,11 @@ const EditService = () => {
         setShowModal(true);
       } else {
         const errorData = await response.json();
-        setErrorMessage(errorData.message || 'Failed to create service');
+        setErrorMessage(errorData.message || translations.editService.fetchUpdateError);
       }
     } catch (error) {
-      console.error('Error creating service:', error);
-      setErrorMessage('An error occurred while creating the service.');
+      console.error(translations.editService.fetchUpdateError, error);
+      setErrorMessage(translations.editService.fetchUpdateError);
     }
   };
 
@@ -132,16 +134,16 @@ const EditService = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete time slot');
+        throw new Error(translations.editService.fetchDeleteError);
       }
 
       const updatedTimeSlots = timeSlots.filter(slot => slot._id !== timeSlotId);
       setTimeSlots(updatedTimeSlots);
-      alert('Time slot deleted successfully');
+      alert(translations.editService.successfulAlert);
       window.location.reload();
     } catch (error) {
-      console.error('Error deleting time slot:', error);
-      setErrorMessage('An error occurred while deleting the time slot.');
+      console.error(translations.editService.fetchDeleteError, error);
+      setErrorMessage(translations.editService.fetchDeleteError);
     }
   };
 
@@ -159,61 +161,61 @@ const EditService = () => {
     <div>
       <Header onNavigate={navigate} />
       <div className='edit-service-container'>
-        <h2>Edit Service</h2>
+        <h2>{translations.editService.editServiceTitle}</h2>
         {errorMessage && <p className="error">{errorMessage}</p>}
         <form onSubmit={handleSubmit}>
           <label>
-            Title:
+            {translations.editService.title}
             <input type="text" name="title" value={serviceData.title} onChange={handleChange} />
           </label>
           <label>
-            Description:
+            {translations.editService.description}
             <input type="text" name="description" value={serviceData.description} onChange={handleChange} />
           </label>
           <label>
-            Location:
+            {translations.editService.location}
             <input type="text" name="location" value={serviceData.location} onChange={handleChange} />
           </label>
           <label>
-            Category: {serviceData.categoryName}
+            {translations.editService.category} {serviceData.categoryName}
             <CategoriesForm selected={serviceData.categoryName} onSelect={handleCategorySelect} />
           </label>
           <label>
-            Country: {serviceData.countryName}
+            {translations.editService.country} {serviceData.countryName}
             <CountriesForm selected={serviceData.countryName} onSelect={handleCountrySelect} />
           </label>
-          <button type="submit">Update Service</button>
+          <button type="submit">{translations.editService.updateButton}</button>
         </form>
 
         {showModal && (
         <div className="modal">
             <div className="modal-content">
-            <p>Do you want to add new time slots?</p>
+            <p>{translations.editService.addTime}</p>
             <div className="button-container">
-                <button onClick={handleAddTimeSlots}>Yes</button>
-                <button onClick={handleViewService}>No</button>
+                <button onClick={handleAddTimeSlots}>{translations.editService.yes}</button>
+                <button onClick={handleViewService}>{translations.editService.no}</button>
             </div>
             </div>
         </div>
         )}
 
         <div>
-          <h3>Time Slots</h3>
+          <h3>{translations.editService.timeTitle}</h3>
           {timeSlots.length > 0 ? (
             <ul className="time-slots-list">
               {timeSlots.map(slot => (
                 <li key={slot.id} className={slot.isSelected ? 'selected' : ''}>
-                  Time: {slot.start_time} - {slot.end_time}
+                  {translations.editService.time} {slot.start_time} - {slot.end_time}
                   <button
                     onClick={() => handleDeleteTimeSlot(slot.id)}
                     className={`time-slot-button ${slot.isSelected ? 'selected-slot' : ''}`}>
-                    Delete
+                    {translations.editService.delete}
                   </button>
                 </li>
               ))}
             </ul>
           ) : (
-            <p>No time slots available for the selected date.</p>
+            <p>{translations.editService.message}</p>
           )}
         </div>
       </div>

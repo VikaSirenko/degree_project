@@ -12,7 +12,8 @@ const CategoriesForm = ({ onSelect }) => {
       const response = await fetch('http://localhost:8080/getCategories');
       if (response.ok) {
         const data = await response.json();
-        setCategories(data.categories);
+        const sortedCategories = data.categories.sort((a, b) => a.localeCompare(b));
+        setCategories(sortedCategories);
       } else {
         console.error('Failed to fetch categories');
       }

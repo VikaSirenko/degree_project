@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
+import { useLanguage } from './LanguageContext';
 
 
 const AddReview = ({ serviceId }) => {
   const [rating, setRating] = useState('1'); 
   const [comment, setComment] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const { translations } = useLanguage();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
 
     if (!comment.trim()) {
-      setErrorMessage('Please fill out the comment field.');
+      setErrorMessage(translations.addReview.fillInError);
       return;
     }
 
     if (!token) {
-      alert('You must be logged in to add a review.');
+      alert(translations.addReview.logInError);
       return;
     }
 
@@ -31,24 +33,24 @@ const AddReview = ({ serviceId }) => {
       });
 
       if (response.ok) {
-        alert('Review added successfully');
+        alert(translations.addReview.successfulAlert);
         setRating('1'); 
         setComment('');
         setErrorMessage('');
         window.location.reload();
       } else {
-        alert('Failed to add review');
+        alert(translations.addReview.failedAlert);
       }
     } catch (error) {
-      console.error('Error adding review:', error);
+      console.error(translations.addReview.anyAddingError, error);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="add-review-form">
-      <h3>Add Review</h3>
+      <h3>{translations.addReview.title}</h3>
       <label>
-        Rating:
+      {translations.addReview.rating}
         <input 
           type="number" 
           value={rating} 
@@ -58,14 +60,14 @@ const AddReview = ({ serviceId }) => {
         />
       </label>
       <label>
-        Comment:
+        {translations.addReview.comment}
         <textarea 
           value={comment} 
           onChange={(e) => setComment(e.target.value)} 
         />
       </label>
       {errorMessage && <div className="form-error">{errorMessage}</div>}
-      <button type="submit">Submit Review</button>
+      <button type="submit">{translations.addReview.submitButton}</button>
     </form>
   );
 };
