@@ -27,13 +27,13 @@ const EditProfile = () => {
           }
         });
         if (!response.ok) {
-          throw new Error(translations.EditProfile.errorFetching);
+          throw new Error(translations.editProfile.errorFetching);
         }
         const data = await response.json();
         setUserData({ ...data, password: '', confirmPassword: '' }); 
       } catch (err) {
         setError(err.message);
-        console.error(translations.EditProfile.errorFetching, err);
+        console.error(translations.editProfile.errorFetching, err);
       }
     };
 
@@ -51,7 +51,7 @@ const EditProfile = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (userData.password !== userData.confirmPassword) {
-      setError(translations.EditProfile.errorPassword);
+      setError(translations.editProfile.errorPassword);
       return;
     }
 
@@ -74,11 +74,11 @@ const EditProfile = () => {
         const errorData = await response.json();
         throw new Error(errorData.message || translations.EditProfile.errorUpdate);
       }
-      alert(translations.EditProfile.successfulAlert);
+      alert(translations.editProfile.successfulAlert);
       navigate('/'); 
     } catch (err) {
       setError(err.message);
-      console.error(translations.EditProfile.errorUpdate, err);
+      console.error(translations.editProfile.errorUpdate, err);
     }
   };
 
@@ -86,11 +86,11 @@ const EditProfile = () => {
     <>
         <Header onNavigate={navigate} />
         <div className="edit-profile-container">
-        <h1>{translations.EditProfile.editProfile}</h1>
+        <h1>{translations.editProfile.editProfile}</h1>
         {error && <div className="error">{error}</div>}
         <form onSubmit={handleSubmit}>
             <label>
-            {translations.EditProfile.firstName}
+            {translations.editProfile.firstName}
             <input
                 type="text"
                 name="firstName"
@@ -99,7 +99,7 @@ const EditProfile = () => {
             />
             </label>
             <label>
-            {translations.EditProfile.lastName}
+            {translations.editProfile.lastName}
             <input
                 type="text"
                 name="lastName"
@@ -108,7 +108,7 @@ const EditProfile = () => {
             />
             </label>
             <label>
-            {translations.EditProfile.email}
+            {translations.editProfile.email}
             <input
                 type="email"
                 name="email"
@@ -117,26 +117,26 @@ const EditProfile = () => {
             />
             </label>
             <label>
-            {translations.EditProfile.password}
+            {translations.editProfile.password}
             <input
                 type="password"
                 name="password"
                 value={userData.password}
                 onChange={handleChange}
-                placeholder={translations.EditProfile.enterPassword}
+                placeholder={translations.editProfile.enterPassword}
             />
             </label>
             <label>
-            {translations.EditProfile.confirmPassword}
+            {translations.editProfile.confirmPassword}
             <input
                 type="password"
                 name="confirmPassword"
                 value={userData.confirmPassword}
                 onChange={handleChange}
-                placeholder={translations.EditProfile.enterConfirmPassword}
+                placeholder={translations.editProfile.enterConfirmPassword}
             />
             </label>
-            <button type="submit">{translations.EditProfile.updateButton}</button>
+            <button type="submit">{translations.editProfile.updateButton}</button>
         </form>
         </div>
         <Footer onNavigate={navigate} />

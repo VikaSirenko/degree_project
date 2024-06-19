@@ -109,7 +109,7 @@ const CreateTimeSlot = () => {
           <h3>{translations.createTimeSlot.listLable}</h3>
           <ul>
             {timeSlots.map((slot, index) => (
-              <li key={index}>{`${translations.createTimeSlot.startLabel} ${slot.start_time}, ${translations.createTimeSlot.endLabe} ${slot.end_time}`}</li>
+              <li key={index}>{`${translations.createTimeSlot.startLabel} ${slot.start_time}, ${translations.createTimeSlot.endLable} ${slot.end_time}`}</li>
             ))}
           </ul>
         </div>

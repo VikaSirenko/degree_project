@@ -9,8 +9,6 @@ import CountriesForm from './DisplayingCountries';
 import Calendar from 'react-calendar';
 import { useLanguage } from './LanguageContext';
 
-
-
 const ServicesPerPage = 8;
 
 const ServicesList = () => {
@@ -28,11 +26,15 @@ const ServicesList = () => {
 
   useEffect(() => {
     fetchServices();
-  }, [currentPage]);
+  }, []);
 
   useEffect(() => {
     filterServices();
   }, [selectedCategory, selectedCountry, allServices]);
+
+  useEffect(() => {
+    setTotalPages(Math.ceil(filteredServices.length / ServicesPerPage));
+  }, [filteredServices]);
 
   const fetchServices = async () => {
     setLoading(true);
@@ -43,7 +45,6 @@ const ServicesList = () => {
       }
       const data = await response.json();
       setAllServices(data.services); 
-      setTotalPages(Math.ceil(data.services.length / ServicesPerPage)); 
     } catch (err) {
       console.error(err);
       setError(err.message);
@@ -62,7 +63,6 @@ const ServicesList = () => {
     }
 
     setFilteredServices(services);
-    setTotalPages(Math.ceil(services.length / ServicesPerPage));
     setCurrentPage(1);
   };
 
@@ -76,7 +76,7 @@ const ServicesList = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    filtred_services: filteredServices,
+                    filtered_services: filteredServices,
                     date: selectedDate.toISOString().split('T')[0]
                 })
             });
@@ -85,7 +85,6 @@ const ServicesList = () => {
             }
             const data = await response.json();
             setFilteredServices(data.availableServices);
-            setTotalPages(Math.ceil(data.availableServices.length / ServicesPerPage));
         } catch (err) {
             console.error(err);
             setError(err.message);
@@ -135,7 +134,7 @@ const ServicesList = () => {
                         <button onClick={goToPrevPage} disabled={currentPage === 1}>
                           {translations.serchedServices.prev}
                         </button>
-                        <span>{currentPage}</span>
+                        <span>{currentPage} / {totalPages}</span>
                         <button onClick={goToNextPage} disabled={currentPage === totalPages}>
                           {translations.serchedServices.next}
                         </button>
